@@ -3,7 +3,11 @@ import { measureBetweenElements } from '@/core/geometry';
 import { extractViewportInfo } from '@/core/layout';
 import { getElementAtPoint, isInspectableElement, isOverlayElement } from '@/core/scanner';
 import { renderBoxModelOverlay } from '@/content/overlay/box-model';
-import { renderHighlightOverlay, renderLayoutGuideOverlay } from '@/content/overlay/highlight';
+import {
+  renderGroupHighlightOverlay,
+  renderHighlightOverlay,
+  renderLayoutGuideOverlay,
+} from '@/content/overlay/highlight';
 import { renderMeasurementOverlay } from '@/content/overlay/measurements';
 import { OverlayHost } from '@/content/overlay/overlay-host';
 import type { DomDirection } from '@/messaging/drawer-bridge';
@@ -29,6 +33,7 @@ export class InspectorController {
   private locked = false;
   private hoveredEl: Element | null = null;
   private selectedEl: Element | null = null;
+  private groupHighlight: { elements: Element[]; variant: 'pattern' | 'outlier' } | null = null;
   private cachedSelectedInspection: ElementInspection | null = null;
   private selectedDirty = true;
   private overlayOptions: OverlayOptions = { ...DEFAULT_OVERLAY_OPTIONS };
@@ -257,6 +262,10 @@ export class InspectorController {
   highlightBySelector(selector: string | null): void {
     if (!selector) {
       this.hoveredEl = null;
+      if (!this.active && !this.groupHighlight) {
+        this.overlayHost.unmount();
+        return;
+      }
       this.scheduleRender();
       return;
     }
@@ -272,6 +281,41 @@ export class InspectorController {
     } catch {
       // Ignore invalid selector
     }
+  }
+
+  highlightGroup(selectors: string[], variant: 'pattern' | 'outlier' = 'pattern'): number {
+    if (!selectors || selectors.length === 0) {
+      this.groupHighlight = null;
+      if (!this.active && !this.hoveredEl) {
+        this.overlayHost.unmount();
+      } else {
+        this.scheduleRender();
+      }
+      return 0;
+    }
+
+    const elements: Element[] = [];
+    for (const sel of selectors.slice(0, 50)) {
+      try {
+        const el = document.querySelector(sel);
+        if (el && isInspectableElement(el)) {
+          elements.push(el);
+        }
+      } catch {
+        // Ignore invalid selector
+      }
+    }
+
+    if (elements.length === 0) {
+      this.groupHighlight = null;
+      this.scheduleRender();
+      return 0;
+    }
+
+    this.groupHighlight = { elements, variant };
+    this.overlayHost.mount();
+    this.scheduleRender();
+    return elements.length;
   }
 
   scanPageDesignSystem(): DesignSystemSummary {
@@ -504,6 +548,13 @@ export class InspectorController {
     const rightInset = this.hooks.getRightInset();
     const selectedValid = this.selectedEl && this.selectedEl.isConnected ? this.selectedEl : null;
     const hoveredValid = this.hoveredEl && this.hoveredEl.isConnected ? this.hoveredEl : null;
+
+    if (this.groupHighlight) {
+      const liveEls = this.groupHighlight.elements.filter((el) => el.isConnected);
+      if (liveEls.length > 0) {
+        renderGroupHighlightOverlay(svg, labels, liveEls, this.groupHighlight.variant, rightInset);
+      }
+    }
 
     const renderSmartLayoutGuides = (el: Element, inspection: ElementInspection) => {
       if (!this.overlayOptions.showLayoutGuides) return;

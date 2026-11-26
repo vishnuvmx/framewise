@@ -2,7 +2,9 @@ import type { OverlayOptions } from '@/shared/types';
 
 export const OVERLAY_HOST_ID = 'layoutlens-overlay-host';
 export const DRAWER_HOST_ID = 'layoutlens-drawer-host';
+export const REFERENCE_HOST_ID = 'layoutlens-reference-host';
 export const OVERLAY_DATA_ATTR = 'data-layoutlens-ignore';
+export const REFERENCE_Z_INDEX = 2147483645;
 export const OVERLAY_Z_INDEX = 2147483646;
 export const DRAWER_Z_INDEX = 2147483647;
 

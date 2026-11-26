@@ -61,6 +61,34 @@ const sampleSummary: DesignSystemSummary = {
   ],
   layoutTree: [],
   issues: [],
+  components: [],
+  consistencyReports: [],
+  blueprint: {
+    layout: {
+      mainContainer: {
+        selector: 'main.container',
+        width: 1200,
+        maxWidth: '1200px',
+        centered: true,
+      },
+      primaryGrid: null,
+      sectionSpacingPx: 24,
+      breakpoint: 'xl',
+    },
+    typography: {
+      headingFont: 'Inter',
+      headingSize: '36px',
+      bodyFont: 'Inter',
+      bodySize: '16px',
+      monoFont: null,
+    },
+    colors: {
+      accent: { hex: '#4F46E5', confidence: 'high', count: 14 },
+      text: null,
+      surface: null,
+    },
+    componentCounts: [],
+  },
 };
 
 const sampleElement: ElementInspection = {
@@ -142,6 +170,7 @@ const sampleElement: ElementInspection = {
   copyableCss: 'div.hero-card {\n  display: flex;\n}',
   ancestors: [],
   children: [],
+  relationships: [],
 };
 
 describe('Exporters & Messaging Protocol', () => {
@@ -180,6 +209,7 @@ describe('Exporters & Messaging Protocol', () => {
     expect(view).toContain('HStack(alignment: .center, spacing: 16)');
     expect(view).toContain('.padding(24)');
     expect(view).toContain('RoundedRectangle(cornerRadius: 12)');
+    expect(view).not.toContain('Approximate from rendered CSS');
   });
 
   it('exports Jetpack Compose (Android) tokens and element composable', () => {
@@ -194,6 +224,29 @@ describe('Exporters & Messaging Protocol', () => {
     expect(composable).toContain('Arrangement.spacedBy(16.dp)');
     expect(composable).toContain('.padding(24.dp)');
     expect(composable).toContain('RoundedCornerShape(12.dp)');
+    expect(composable).not.toContain('Approximate from rendered CSS');
+  });
+
+  it('adds honest approximation notes to SwiftUI and Compose snippets for CSS-specific effects', () => {
+    const complexElement: ElementInspection = {
+      ...sampleElement,
+      geometry: { ...sampleElement.geometry, isTransformed: true, transform: 'scale(1.02)' },
+      layout: {
+        ...sampleElement.layout,
+        position: 'sticky',
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)',
+      },
+    };
+
+    const swift = exportElementSwiftUI(complexElement);
+    expect(swift).toContain(
+      '// Approximate from rendered CSS — manually adapt: box-shadow, CSS transform, position: sticky'
+    );
+
+    const compose = exportElementCompose(complexElement);
+    expect(compose).toContain(
+      '// Approximate from rendered CSS — manually adapt: box-shadow, CSS transform, position: sticky'
+    );
   });
 
   it('exports valid W3C Design Tokens JSON and Typography Config JSON', () => {

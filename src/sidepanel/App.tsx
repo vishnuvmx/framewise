@@ -1,5 +1,6 @@
 import { ChevronRight, Crosshair, Moon, Pause, Sun, X } from 'lucide-react';
 import { type KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { DEFAULT_REFERENCE_STATE } from '@/content/overlay/reference-overlay';
 import { drawerBridge } from '@/messaging/drawer-bridge';
 import type { ContentEvent } from '@/messaging/protocol';
 import { STORAGE_KEYS } from '@/shared/constants';
@@ -8,14 +9,17 @@ import type {
   DistanceMeasurement,
   ElementInspection,
   InspectorTab,
+  ReferenceOverlayState,
   ViewportInfo,
 } from '@/shared/types';
+import { CompareView } from '@/sidepanel/views/CompareView';
 import { ElementView } from '@/sidepanel/views/ElementView';
 import { PageView } from '@/sidepanel/views/PageView';
 
 const MODES: Array<{ id: InspectorTab; label: string }> = [
   { id: 'element', label: 'Element' },
   { id: 'page', label: 'Page' },
+  { id: 'compare', label: 'Compare' },
 ];
 
 interface BridgeStatePayload {
@@ -69,6 +73,7 @@ export function App() {
   const [selected, setSelected] = useState<ElementInspection | null>(null);
   const [measurement, setMeasurement] = useState<DistanceMeasurement | null>(null);
   const [designSystem, setDesignSystem] = useState<DesignSystemSummary | null>(null);
+  const [reference, setReference] = useState<ReferenceOverlayState>(DEFAULT_REFERENCE_STATE);
   const [scanning, setScanning] = useState(false);
   const [theme, setTheme] = useState<ResolvedTheme>(readInitialTheme);
 
@@ -86,6 +91,13 @@ export function App() {
       setStatusError(null);
     } else if (res.error) {
       setStatusError(res.error);
+    }
+
+    const refRes = await drawerBridge.send<ReferenceOverlayState>({
+      type: 'GET_REFERENCE_OVERLAY',
+    });
+    if (refRes.ok && refRes.data) {
+      setReference(refRes.data);
     }
   }, []);
 
@@ -149,14 +161,18 @@ export function App() {
           target.isContentEditable);
       if (isEditable) return;
 
-      // Alt+Shift+L toggles the drawer closed even when focus is inside the iframe
-      if (event.altKey && event.shiftKey && !event.ctrlKey && !event.metaKey && event.code === 'KeyL') {
+      if (
+        event.altKey &&
+        event.shiftKey &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        event.code === 'KeyL'
+      ) {
         event.preventDefault();
         void drawerBridge.send({ type: 'TOGGLE_DRAWER' });
         return;
       }
 
-      // Esc steps cleanly: unlock -> pause -> close drawer
       if (event.key === 'Escape') {
         event.preventDefault();
         void (async () => {
@@ -183,7 +199,6 @@ export function App() {
         return;
       }
 
-      // Plain arrow keys walk DOM when an element is locked (skip if focus is on a tab button)
       if (!locked || !selected || target?.getAttribute('role') === 'tab') return;
       if (event.ctrlKey || event.metaKey) return;
 
@@ -232,6 +247,7 @@ export function App() {
   };
 
   const handleSelectSelector = async (selector: string) => {
+    await drawerBridge.send({ type: 'HIGHLIGHT_GROUP', selectors: [] });
     const res = await drawerBridge.send<ElementInspection>({
       type: 'SELECT_BY_SELECTOR',
       selector,
@@ -246,6 +262,19 @@ export function App() {
 
   const handleHighlightSelector = async (selector: string | null) => {
     await drawerBridge.send({ type: 'HIGHLIGHT_BY_SELECTOR', selector });
+  };
+
+  const handleHighlightGroup = async (
+    selectors: string[],
+    variant: 'pattern' | 'outlier' = 'pattern'
+  ) => {
+    await drawerBridge.send({ type: 'HIGHLIGHT_GROUP', selectors, variant });
+  };
+
+  const handleUpdateReference = async (next: ReferenceOverlayState | null) => {
+    const resolved = next ?? { ...DEFAULT_REFERENCE_STATE };
+    setReference(resolved);
+    await drawerBridge.send({ type: 'UPDATE_REFERENCE_OVERLAY', state: next });
   };
 
   const handleUnlock = async () => {
@@ -322,7 +351,9 @@ export function App() {
               aria-label={active ? 'Pause inspection' : 'Start inspecting'}
               aria-pressed={active}
               className={`ll-icon-btn ${
-                active ? '!border-[var(--ll-accent)] !bg-[var(--ll-accent-soft)] !text-[var(--ll-accent)]' : ''
+                active
+                  ? '!border-[var(--ll-accent)] !bg-[var(--ll-accent-soft)] !text-[var(--ll-accent)]'
+                  : ''
               }`}
             >
               {active ? (
@@ -368,7 +399,7 @@ export function App() {
           </div>
         </div>
 
-        {/* Clean 2-Mode Switch: Element | Page */}
+        {/* Clean 3-Mode Switch: Element | Page | Compare */}
         <nav role="tablist" aria-label="LayoutLens view mode" className="ll-tablist">
           {MODES.map((item, idx) => {
             const isSelected = mode === item.id;
@@ -388,6 +419,12 @@ export function App() {
                 className="ll-tab"
               >
                 {item.label}
+                {item.id === 'compare' && reference.imageDataUrl && reference.visible && (
+                  <span
+                    className="h-1.5 w-1.5 rounded-full shrink-0"
+                    style={{ backgroundColor: 'var(--ll-accent-fill)' }}
+                  />
+                )}
               </button>
             );
           })}
@@ -403,7 +440,7 @@ export function App() {
 
       {/* Main Content */}
       <main role="tabpanel" aria-labelledby={`ll-tab-${mode}`} className="flex-1 overflow-y-auto">
-        {mode === 'element' ? (
+        {mode === 'element' && (
           <ElementView
             inspection={activeInspection}
             measurement={measurement}
@@ -415,7 +452,8 @@ export function App() {
             onSelectSelector={handleSelectSelector}
             onHighlightSelector={handleHighlightSelector}
           />
-        ) : (
+        )}
+        {mode === 'page' && (
           <PageView
             designSystem={designSystem}
             selected={activeInspection}
@@ -424,6 +462,14 @@ export function App() {
             onScan={handleScanDesignSystem}
             onSelectSelector={handleSelectSelector}
             onHighlightSelector={handleHighlightSelector}
+            onHighlightGroup={handleHighlightGroup}
+          />
+        )}
+        {mode === 'compare' && (
+          <CompareView
+            reference={reference}
+            viewport={viewport}
+            onUpdate={handleUpdateReference}
           />
         )}
       </main>

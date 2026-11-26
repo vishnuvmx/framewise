@@ -3,9 +3,9 @@ import { defineManifest } from '@crxjs/vite-plugin';
 export default defineManifest({
   manifest_version: 3,
   name: 'LayoutLens',
-  version: '0.3.0',
+  version: '0.4.0',
   description:
-    'Visual website inspection toolkit: inspect box models, Flexbox/Grid layouts, spacing, typography, colors, and export design tokens.',
+    'Understand. Analyze. Verify. Inspect rendered layouts, discover component patterns and drift, and compare Figma designs locally.',
   icons: {
     '16': 'icons/icon-16.png',
     '48': 'icons/icon-48.png',

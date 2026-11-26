@@ -66,6 +66,17 @@ export function exportElementCompose(el: ElementInspection): string {
   const modBlock = mods.join('\n        ');
   const gap = Math.round(layout.rowGap || layout.columnGap);
 
+  const notes: string[] = [];
+  if (layout.boxShadow && layout.boxShadow !== 'none') notes.push('box-shadow');
+  if (geometry.isTransformed) notes.push('CSS transform');
+  if (layout.position === 'fixed' || layout.position === 'sticky') {
+    notes.push(`position: ${layout.position}`);
+  }
+  const footerNote =
+    notes.length > 0
+      ? `\n// Approximate from rendered CSS — manually adapt: ${notes.join(', ')}`
+      : '';
+
   if (layout.isFlex) {
     const isColumn = layout.flexDirection?.startsWith('column');
     const comp = isColumn ? 'Column' : 'Row';
@@ -83,32 +94,36 @@ export function exportElementCompose(el: ElementInspection): string {
     if (isColumn && layout.alignItems === 'center') {
       args.push('horizontalAlignment = Alignment.CenterHorizontally');
     }
-    return `${comp}(\n    ${args.join(',\n    ')}\n) {\n    // ${el.selector}\n}`;
+    return `${comp}(\n    ${args.join(',\n    ')}\n) {\n    // ${el.selector}\n}${footerNote}`;
   }
 
   if (layout.isGrid && layout.grid && layout.grid.columns.length > 0) {
-    return [
-      'LazyVerticalGrid(',
-      `    columns = GridCells.Fixed(${layout.grid.columns.length}),`,
-      `    modifier = ${modBlock},`,
-      `    horizontalArrangement = Arrangement.spacedBy(${Math.round(layout.columnGap)}.dp),`,
-      `    verticalArrangement = Arrangement.spacedBy(${Math.round(layout.rowGap)}.dp)`,
-      ') {',
-      `    // ${el.selector}`,
-      '}',
-    ].join('\n');
+    return (
+      [
+        'LazyVerticalGrid(',
+        `    columns = GridCells.Fixed(${layout.grid.columns.length}),`,
+        `    modifier = ${modBlock},`,
+        `    horizontalArrangement = Arrangement.spacedBy(${Math.round(layout.columnGap)}.dp),`,
+        `    verticalArrangement = Arrangement.spacedBy(${Math.round(layout.rowGap)}.dp)`,
+        ') {',
+        `    // ${el.selector}`,
+        '}',
+      ].join('\n') + footerNote
+    );
   }
 
   const preview = el.textPreview ? el.textPreview.replace(/"/g, '\\"') : el.selector;
-  return [
-    'Text(',
-    `    text = "${preview}",`,
-    `    modifier = ${modBlock},`,
-    `    color = ${hexToComposeColor(colors.color.hex)},`,
-    `    fontSize = ${Math.round(typography.fontSizePx)}.sp,`,
-    `    fontWeight = ${toComposeWeight(typography.fontWeight)}`,
-    ')',
-  ].join('\n');
+  return (
+    [
+      'Text(',
+      `    text = "${preview}",`,
+      `    modifier = ${modBlock},`,
+      `    color = ${hexToComposeColor(colors.color.hex)},`,
+      `    fontSize = ${Math.round(typography.fontSizePx)}.sp,`,
+      `    fontWeight = ${toComposeWeight(typography.fontWeight)}`,
+      ')',
+    ].join('\n') + footerNote
+  );
 }
 
 export function exportComposeTokens(summary: DesignSystemSummary): string {

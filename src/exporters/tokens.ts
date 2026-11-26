@@ -58,6 +58,58 @@ export function exportInspectionReport(
     );
   }
 
+  if (summary.blueprint) {
+    const bp = summary.blueprint;
+    lines.push('## Website Design Blueprint', '');
+    if (bp.layout.mainContainer) {
+      lines.push(
+        `- **Main Container:** \`${bp.layout.mainContainer.selector}\` (${formatPx(bp.layout.mainContainer.width)}, max-width: \`${bp.layout.mainContainer.maxWidth}\`${bp.layout.mainContainer.centered ? ', centered' : ''})`
+      );
+    }
+    if (bp.layout.primaryGrid) {
+      lines.push(
+        `- **Primary Grid:** ${bp.layout.primaryGrid.columns} columns · gap \`${bp.layout.primaryGrid.gap}\` (\`${bp.layout.primaryGrid.selector}\`)`
+      );
+    }
+    if (bp.layout.sectionSpacingPx) {
+      lines.push(`- **Dominant Section Rhythm:** \`${bp.layout.sectionSpacingPx}px\``);
+    }
+    if (bp.typography.headingFont || bp.typography.bodyFont) {
+      lines.push(
+        `- **Typography Roles:** Heading \`${bp.typography.headingFont ?? '—'}\` (${bp.typography.headingSize ?? '—'}) · Body \`${bp.typography.bodyFont ?? '—'}\` (${bp.typography.bodySize ?? '—'})${bp.typography.monoFont ? ` · Mono \`${bp.typography.monoFont}\`` : ''}`
+      );
+    }
+    if (bp.colors.accent || bp.colors.text || bp.colors.surface) {
+      lines.push(
+        `- **Color Roles:** Accent \`${bp.colors.accent?.hex ?? '—'}\` · Text \`${bp.colors.text?.hex ?? '—'}\` · Surface \`${bp.colors.surface?.hex ?? '—'}\``
+      );
+    }
+    lines.push('');
+  }
+
+  if (summary.components && summary.components.length > 0) {
+    lines.push(`## Discovered Component Patterns (${summary.components.length})`, '');
+    for (const comp of summary.components) {
+      lines.push(
+        `- **${comp.name}** (${comp.count}×) — ${comp.sampleSize.width}×${comp.sampleSize.height}px · radius \`${comp.borderRadius}\` · font \`${comp.fontSize}\``
+      );
+    }
+    lines.push('');
+  }
+
+  if (summary.consistencyReports && summary.consistencyReports.length > 0) {
+    lines.push(`## Component Consistency & Outliers`, '');
+    for (const report of summary.consistencyReports) {
+      lines.push(
+        `### ${report.categoryLabel} (${report.totalInstances} detected — baseline ${report.baseline.heightPx}px height, ${report.baseline.borderRadius} radius, ${report.baseline.fontSize} font)`
+      );
+      for (const outlier of report.outliers) {
+        lines.push(`- \`${outlier.label}\` (\`${outlier.selector}\`): ${outlier.reasons.join(', ')}`);
+      }
+      lines.push('');
+    }
+  }
+
   lines.push(`## Color Palette (${summary.colors.length} colors)`, '');
   for (const c of summary.colors.slice(0, 12)) {
     lines.push(`- \`${c.hex}\` — **${c.suggestedName}** (${c.count}×, ${c.roles.join('/')})`);

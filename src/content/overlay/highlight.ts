@@ -91,6 +91,55 @@ export function renderHighlightOverlay(
 }
 
 /**
+ * Highlights multiple matching component instances (or outliers) simultaneously on the page.
+ */
+export function renderGroupHighlightOverlay(
+  svg: SVGSVGElement,
+  labels: HTMLDivElement,
+  elements: Element[],
+  variant: 'pattern' | 'outlier',
+  rightInset = 0
+): void {
+  const stroke = variant === 'outlier' ? '#e11d48' : '#2563eb';
+  const fill = variant === 'outlier' ? 'rgba(225, 29, 72, 0.12)' : 'rgba(37, 99, 235, 0.10)';
+  const maxX = Math.max(60, window.innerWidth - rightInset - 12);
+
+  elements.forEach((el, index) => {
+    const r = el.getBoundingClientRect();
+    if (r.width <= 0 || r.height <= 0) return;
+    if (r.bottom < 0 || r.top > window.innerHeight || r.right < 0 || r.left > window.innerWidth) {
+      return;
+    }
+
+    svg.appendChild(
+      createSvgEl('rect', {
+        x: r.left,
+        y: r.top,
+        width: r.width,
+        height: r.height,
+        fill,
+        stroke,
+        'stroke-width': 1.75,
+        rx: 2,
+      })
+    );
+
+    const pillX = Math.min(maxX, Math.max(12, r.left + 10));
+    const pillY = Math.max(12, Math.min(window.innerHeight - 12, r.top + 10));
+    const pill = document.createElement('span');
+    pill.className = variant === 'outlier' ? 'll-pill ll-pill--measure' : 'll-pill';
+    if (variant === 'pattern') {
+      pill.style.background = '#2563eb';
+      pill.style.color = '#ffffff';
+    }
+    pill.style.left = `${Math.round(pillX)}px`;
+    pill.style.top = `${Math.round(pillY)}px`;
+    pill.textContent = String(index + 1);
+    labels.appendChild(pill);
+  });
+}
+
+/**
  * Renders visual Flexbox (child boundaries & gap bands) or CSS Grid
  * (resolved column & row track lines + gap gutters) overlays.
  */

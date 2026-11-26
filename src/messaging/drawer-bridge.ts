@@ -1,5 +1,5 @@
 import type { CommandResponse, ContentEvent } from '@/messaging/protocol';
-import type { OverlayOptions, ThemePreference } from '@/shared/types';
+import type { OverlayOptions, ReferenceOverlayState, ThemePreference } from '@/shared/types';
 
 export const BRIDGE_REQ = 'layoutlens-bridge-req';
 export const BRIDGE_RES = 'layoutlens-bridge-res';
@@ -15,12 +15,15 @@ export type DrawerBridgeCommand =
   | { type: 'SCAN_DESIGN_SYSTEM' }
   | { type: 'SELECT_BY_SELECTOR'; selector: string }
   | { type: 'HIGHLIGHT_BY_SELECTOR'; selector: string | null }
+  | { type: 'HIGHLIGHT_GROUP'; selectors: string[]; variant?: 'pattern' | 'outlier' }
   | { type: 'NAVIGATE_DOM'; direction: DomDirection }
   | { type: 'CLEAR_SELECTION' }
   | { type: 'UNLOCK_SELECTION' }
   | { type: 'CLOSE_DRAWER' }
   | { type: 'SET_COLLAPSED'; collapsed: boolean }
   | { type: 'SET_THEME'; theme: ThemePreference }
+  | { type: 'UPDATE_REFERENCE_OVERLAY'; state: ReferenceOverlayState | null }
+  | { type: 'GET_REFERENCE_OVERLAY' }
   | { type: 'COPY_TEXT'; text: string };
 
 interface PendingRequest {

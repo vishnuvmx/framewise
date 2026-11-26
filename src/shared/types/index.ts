@@ -161,6 +161,13 @@ export interface DistanceMeasurement {
   innerOffsets: Spacing | null;
 }
 
+export interface LayoutRelationship {
+  role: 'self' | 'parent' | 'container' | 'overflow' | 'siblings';
+  summary: string;
+  detail: string;
+  selector: string;
+}
+
 export interface ElementInspection {
   id: string;
   selector: string;
@@ -179,6 +186,7 @@ export interface ElementInspection {
   copyableCss: string;
   ancestors: HierarchyNode[];
   children: HierarchyNode[];
+  relationships: LayoutRelationship[];
 }
 
 export interface ViewportInfo {
@@ -248,6 +256,90 @@ export interface ConsistencyIssue {
   values: string[];
 }
 
+export type ComponentCategory = 'button' | 'icon-button' | 'card' | 'input' | 'badge' | 'nav-link';
+
+export interface ComponentPattern {
+  id: string;
+  category: ComponentCategory;
+  name: string;
+  count: number;
+  selectors: string[];
+  sampleSize: { width: number; height: number };
+  backgroundHex: string;
+  textHex: string;
+  borderRadius: string;
+  fontSize: string;
+}
+
+export interface ComponentOutlier {
+  selector: string;
+  label: string;
+  reasons: string[];
+}
+
+export interface ComponentConsistencyReport {
+  category: ComponentCategory;
+  categoryLabel: string;
+  totalInstances: number;
+  baseline: {
+    heightPx: number;
+    borderRadius: string;
+    fontSize: string;
+  };
+  outliers: ComponentOutlier[];
+}
+
+export interface DesignBlueprint {
+  layout: {
+    mainContainer: {
+      selector: string;
+      width: number;
+      maxWidth: string;
+      centered: boolean;
+    } | null;
+    primaryGrid: {
+      selector: string;
+      columns: number;
+      gap: string;
+    } | null;
+    sectionSpacingPx: number | null;
+    breakpoint: ViewportInfo['breakpoint'];
+  };
+  typography: {
+    headingFont: string | null;
+    headingSize: string | null;
+    bodyFont: string | null;
+    bodySize: string | null;
+    monoFont: string | null;
+  };
+  colors: {
+    accent: { hex: string; confidence: 'high' | 'medium'; count: number } | null;
+    text: { hex: string; confidence: 'high' | 'medium'; count: number } | null;
+    surface: { hex: string; confidence: 'high' | 'medium'; count: number } | null;
+  };
+  componentCounts: Array<{
+    category: ComponentCategory;
+    label: string;
+    patterns: number;
+    instances: number;
+  }>;
+}
+
+export interface ReferenceOverlayState {
+  imageDataUrl: string | null;
+  imageName: string;
+  naturalWidth: number;
+  naturalHeight: number;
+  visible: boolean;
+  opacity: number;
+  blendMode: 'normal' | 'difference' | 'split';
+  splitPercent: number;
+  scale: number;
+  offsetX: number;
+  offsetY: number;
+  lockToScroll: boolean;
+}
+
 export interface DesignSystemSummary {
   url: string;
   title: string;
@@ -262,6 +354,9 @@ export interface DesignSystemSummary {
   containers: ContainerWidthToken[];
   layoutTree: LayoutNodeSummary[];
   issues: ConsistencyIssue[];
+  components: ComponentPattern[];
+  consistencyReports: ComponentConsistencyReport[];
+  blueprint: DesignBlueprint;
 }
 
 export interface OverlayOptions {
@@ -273,7 +368,7 @@ export interface OverlayOptions {
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 
-export type InspectorTab = 'element' | 'page';
+export type InspectorTab = 'element' | 'page' | 'compare';
 
 export interface InspectorState {
   active: boolean;

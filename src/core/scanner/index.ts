@@ -3,30 +3,41 @@ import {
   MAX_SCAN_ELEMENTS,
   OVERLAY_DATA_ATTR,
   OVERLAY_HOST_ID,
+  REFERENCE_HOST_ID,
   SKIPPED_TAGS,
 } from '@/shared/constants';
 
 export function isOverlayElement(node: Node | null | undefined): boolean {
   if (!node) return false;
   if (node instanceof ShadowRoot) {
-    return node.host?.id === OVERLAY_HOST_ID || node.host?.id === DRAWER_HOST_ID;
+    return (
+      node.host?.id === OVERLAY_HOST_ID ||
+      node.host?.id === DRAWER_HOST_ID ||
+      node.host?.id === REFERENCE_HOST_ID
+    );
   }
   if (node.nodeType !== Node.ELEMENT_NODE) return false;
 
   const el = node as Element;
-  if (el.id === OVERLAY_HOST_ID || el.id === DRAWER_HOST_ID) return true;
+  if (el.id === OVERLAY_HOST_ID || el.id === DRAWER_HOST_ID || el.id === REFERENCE_HOST_ID) {
+    return true;
+  }
   if (typeof el.hasAttribute === 'function' && el.hasAttribute(OVERLAY_DATA_ATTR)) return true;
 
   const root = el.getRootNode?.();
   if (
     root instanceof ShadowRoot &&
-    (root.host?.id === OVERLAY_HOST_ID || root.host?.id === DRAWER_HOST_ID)
+    (root.host?.id === OVERLAY_HOST_ID ||
+      root.host?.id === DRAWER_HOST_ID ||
+      root.host?.id === REFERENCE_HOST_ID)
   ) {
     return true;
   }
   return Boolean(
     typeof el.closest === 'function' &&
-      el.closest(`#${OVERLAY_HOST_ID}, #${DRAWER_HOST_ID}, [${OVERLAY_DATA_ATTR}]`)
+      el.closest(
+        `#${OVERLAY_HOST_ID}, #${DRAWER_HOST_ID}, #${REFERENCE_HOST_ID}, [${OVERLAY_DATA_ATTR}]`
+      )
   );
 }
 

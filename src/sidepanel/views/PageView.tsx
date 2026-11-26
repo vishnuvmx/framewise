@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, Download, RefreshCw } from 'lucide-react';
+import { ChevronDown, ChevronRight, Download, Eye, RefreshCw } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import {
   formatPageExport,
@@ -18,6 +18,7 @@ interface PageViewProps {
   onScan: () => void;
   onSelectSelector: (selector: string) => void;
   onHighlightSelector: (selector: string | null) => void;
+  onHighlightGroup: (selectors: string[], variant?: 'pattern' | 'outlier') => void;
 }
 
 function downloadTextFile(filename: string, content: string, mimeType: string): void {
@@ -38,9 +39,11 @@ export function PageView({
   onScan,
   onSelectSelector,
   onHighlightSelector,
+  onHighlightGroup,
 }: PageViewProps) {
   const [copiedHex, setCopiedHex] = useState<string | null>(null);
   const [format, setFormat] = useState<PageExportFormat>('css');
+  const [pinnedGroupId, setPinnedGroupId] = useState<string | null>(null);
   const [layoutTreeOpen, setLayoutTreeOpen] = useState(false);
 
   const exportedOutput = useMemo(() => {
@@ -55,11 +58,25 @@ export function PageView({
     window.setTimeout(() => setCopiedHex(null), 1200);
   };
 
+  const handleToggleGroup = (
+    groupId: string,
+    selectors: string[],
+    variant: 'pattern' | 'outlier'
+  ) => {
+    if (pinnedGroupId === groupId) {
+      setPinnedGroupId(null);
+      onHighlightGroup([], variant);
+    } else {
+      setPinnedGroupId(groupId);
+      onHighlightGroup(selectors, variant);
+    }
+  };
+
   if (!designSystem) {
     return (
       <EmptyState
-        title={scanning ? 'Scanning page design system…' : 'Analyze this page'}
-        description="Extract the color palette, typography scale, spacing rhythm, and export tokens for Web, iOS (SwiftUI), or Android (Compose)."
+        title={scanning ? 'Analyzing page interface…' : 'Analyze this page'}
+        description="Discover repeated UI components, spot consistency outliers, build a design blueprint, and export tokens for Web, iOS, or Android."
         actionLabel={scanning ? undefined : 'Scan page'}
         onAction={scanning ? undefined : onScan}
       />
@@ -67,6 +84,7 @@ export function PageView({
   }
 
   const vp = designSystem.viewport ?? viewport;
+  const bp = designSystem.blueprint;
   const maxSpace = Math.max(...designSystem.spacing.map((s) => s.valuePx), 64);
   const dominantSpaceCount = Math.max(...designSystem.spacing.map((s) => s.count), 0);
 
@@ -90,13 +108,17 @@ export function PageView({
             </div>
           )}
           <div className="ll-mono text-[12px] text-[var(--ll-text-muted)]">
-            {designSystem.scannedElements} elements · {designSystem.colors.length} colors ·{' '}
-            {designSystem.typography.length} styles
+            {designSystem.scannedElements} elements · {designSystem.components.length} patterns ·{' '}
+            {designSystem.colors.length} colors
           </div>
         </div>
         <button
           type="button"
-          onClick={onScan}
+          onClick={() => {
+            setPinnedGroupId(null);
+            onHighlightGroup([]);
+            onScan();
+          }}
           disabled={scanning}
           className="ll-btn ll-btn-secondary ll-btn-sm shrink-0"
         >
@@ -108,7 +130,242 @@ export function PageView({
         </button>
       </section>
 
-      {/* 2. Export Design System (Web CSS / Tailwind v4 / iOS SwiftUI / Android Compose / JSON / Report) */}
+      {/* 2. Website Design Blueprint */}
+      <section className="ll-section space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <span className="ll-section-title">Design blueprint</span>
+          <CopyButton
+            text={formatPageExport(designSystem, 'report', selected)}
+            label="Copy blueprint"
+          />
+        </div>
+
+        <div className="divide-y divide-[var(--ll-hairline)] border-t border-b border-[var(--ll-hairline)]">
+          {bp.layout.mainContainer && (
+            <button
+              type="button"
+              onClick={() => onSelectSelector(bp.layout.mainContainer!.selector)}
+              onMouseEnter={() => onHighlightSelector(bp.layout.mainContainer!.selector)}
+              onMouseLeave={() => onHighlightSelector(null)}
+              className="w-full min-h-9 flex items-center justify-between gap-3 px-2 py-2 text-left hover:bg-[var(--ll-raised)] transition-colors cursor-pointer"
+            >
+              <span className="text-[13px] text-[var(--ll-text-secondary)]">Main container</span>
+              <span className="ll-mono text-[13px] text-[var(--ll-text)]">
+                {formatPx(bp.layout.mainContainer.width)}
+                {bp.layout.mainContainer.centered ? ' · centered' : ''}
+              </span>
+            </button>
+          )}
+          {bp.layout.primaryGrid && (
+            <button
+              type="button"
+              onClick={() => onSelectSelector(bp.layout.primaryGrid!.selector)}
+              onMouseEnter={() => onHighlightSelector(bp.layout.primaryGrid!.selector)}
+              onMouseLeave={() => onHighlightSelector(null)}
+              className="w-full min-h-9 flex items-center justify-between gap-3 px-2 py-2 text-left hover:bg-[var(--ll-raised)] transition-colors cursor-pointer"
+            >
+              <span className="text-[13px] text-[var(--ll-text-secondary)]">Primary grid</span>
+              <span className="ll-mono text-[13px] text-[var(--ll-text)]">
+                {bp.layout.primaryGrid.columns} cols · gap {bp.layout.primaryGrid.gap}
+              </span>
+            </button>
+          )}
+          {bp.layout.sectionSpacingPx && (
+            <div className="min-h-9 flex items-center justify-between gap-3 px-2 py-2">
+              <span className="text-[13px] text-[var(--ll-text-secondary)]">Section rhythm</span>
+              <span className="ll-mono text-[13px]">{bp.layout.sectionSpacingPx}px</span>
+            </div>
+          )}
+          {(bp.typography.headingFont || bp.typography.bodyFont) && (
+            <div className="min-h-9 flex items-center justify-between gap-3 px-2 py-2">
+              <span className="text-[13px] text-[var(--ll-text-secondary)]">Type pairing</span>
+              <span className="ll-mono text-[12px] text-right truncate">
+                {bp.typography.headingFont ?? '—'} / {bp.typography.bodyFont ?? '—'}
+              </span>
+            </div>
+          )}
+          {(bp.colors.accent || bp.colors.surface) && (
+            <div className="min-h-9 flex items-center justify-between gap-3 px-2 py-2">
+              <span className="text-[13px] text-[var(--ll-text-secondary)] shrink-0">Key colors</span>
+              <div className="flex flex-wrap items-center justify-end gap-2 ll-mono text-[12px] min-w-0">
+                {bp.colors.accent && (
+                  <span className="inline-flex items-center gap-1">
+                    <span
+                      className="h-3 w-3 rounded-[3px] border border-[var(--ll-hairline-strong)]"
+                      style={{ backgroundColor: bp.colors.accent.hex }}
+                    />
+                    {bp.colors.accent.hex}
+                  </span>
+                )}
+                {bp.colors.text && (
+                  <span className="inline-flex items-center gap-1">
+                    <span
+                      className="h-3 w-3 rounded-[3px] border border-[var(--ll-hairline-strong)]"
+                      style={{ backgroundColor: bp.colors.text.hex }}
+                    />
+                    {bp.colors.text.hex}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 3. Discovered Component Patterns (click/hover highlights ALL instances on page) */}
+      <section className="ll-section space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <span className="ll-section-title">Discovered components</span>
+          {pinnedGroupId ? (
+            <button
+              type="button"
+              onClick={() => {
+                setPinnedGroupId(null);
+                onHighlightGroup([]);
+              }}
+              className="ll-btn ll-btn-secondary ll-btn-sm"
+            >
+              Clear highlights
+            </button>
+          ) : (
+            <span className="text-[12px] text-[var(--ll-text-muted)]">Click to highlight all</span>
+          )}
+        </div>
+
+        {designSystem.components.length === 0 ? (
+          <p className="text-[13px] text-[var(--ll-text-muted)]">
+            No repeated component patterns detected on this page
+          </p>
+        ) : (
+          <div className="space-y-1.5 max-h-64 overflow-y-auto">
+            {designSystem.components.map((comp) => {
+              const isPinned = pinnedGroupId === comp.id;
+              return (
+                <button
+                  key={comp.id}
+                  type="button"
+                  onClick={() => handleToggleGroup(comp.id, comp.selectors, 'pattern')}
+                  onMouseEnter={() => {
+                    if (!pinnedGroupId) onHighlightGroup(comp.selectors, 'pattern');
+                  }}
+                  onMouseLeave={() => {
+                    if (!pinnedGroupId) onHighlightGroup([]);
+                  }}
+                  className={`w-full px-3 py-2.5 rounded-[8px] border text-left flex items-center justify-between gap-3 transition-colors cursor-pointer ${
+                    isPinned
+                      ? 'border-[var(--ll-accent)] bg-[var(--ll-accent-soft)]'
+                      : 'border-[var(--ll-hairline)] bg-[var(--ll-raised)] hover:bg-[var(--ll-hover)]'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span
+                      className="h-6 w-6 rounded-[5px] border border-[var(--ll-hairline-strong)] shrink-0"
+                      style={{
+                        backgroundColor:
+                          comp.backgroundHex === 'TRANSPARENT' ? 'transparent' : comp.backgroundHex,
+                      }}
+                    />
+                    <div className="min-w-0">
+                      <div className="text-[13px] font-medium truncate">{comp.name}</div>
+                      <div className="ll-mono text-[11px] text-[var(--ll-text-muted)]">
+                        {comp.sampleSize.width}×{comp.sampleSize.height} · r {comp.borderRadius} ·{' '}
+                        {comp.fontSize}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="ll-mono text-[12px] font-medium text-[var(--ll-accent)]">
+                      {comp.count}×
+                    </span>
+                    <Eye
+                      className={`h-3.5 w-3.5 ${
+                        isPinned ? 'text-[var(--ll-accent)]' : 'text-[var(--ll-text-muted)]'
+                      }`}
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* 4. Component Consistency & Outlier Detection */}
+      {designSystem.consistencyReports.length > 0 && (
+        <section className="ll-section space-y-3">
+          <span className="ll-section-title">Consistency & outliers</span>
+          <div className="space-y-3">
+            {designSystem.consistencyReports.map((report) => {
+              const groupKey = `outlier:${report.category}`;
+              const isPinned = pinnedGroupId === groupKey;
+              return (
+                <div
+                  key={report.category}
+                  className="ll-raised p-3 space-y-2.5 border border-[var(--ll-hairline)] overflow-hidden min-w-0"
+                >
+                  <div className="flex items-center justify-between gap-2 min-w-0">
+                    <div className="min-w-0">
+                      <div className="text-[13px] font-medium truncate">
+                        {report.categoryLabel}{' '}
+                        <span className="ll-mono text-[12px] text-[var(--ll-text-muted)]">
+                          ({report.totalInstances})
+                        </span>
+                      </div>
+                      <div className="ll-mono text-[11px] text-[var(--ll-text-muted)] truncate">
+                        Baseline: {report.baseline.heightPx}px · r {report.baseline.borderRadius} ·{' '}
+                        {report.baseline.fontSize}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleToggleGroup(
+                          groupKey,
+                          report.outliers.map((o) => o.selector),
+                          'outlier'
+                        )
+                      }
+                      className={`ll-btn ll-btn-sm shrink-0 ${
+                        isPinned ? 'll-btn-danger' : 'll-btn-secondary'
+                      }`}
+                    >
+                      {isPinned ? 'Hide' : `${report.outliers.length} outliers`}
+                    </button>
+                  </div>
+
+                  <div className="divide-y divide-[var(--ll-hairline)] border-t border-[var(--ll-hairline)]">
+                    {report.outliers.map((outlier, idx) => (
+                      <button
+                        key={`${outlier.selector}-${idx}`}
+                        type="button"
+                        onClick={() => onSelectSelector(outlier.selector)}
+                        onMouseEnter={() => onHighlightSelector(outlier.selector)}
+                        onMouseLeave={() => onHighlightSelector(null)}
+                        className="w-full py-2.5 flex flex-col items-start gap-1 text-left hover:text-[var(--ll-accent)] transition-colors cursor-pointer min-w-0"
+                      >
+                        <span className="text-[13px] font-medium text-[var(--ll-text)] truncate w-full">
+                          {outlier.label}
+                        </span>
+                        <div className="flex flex-wrap gap-x-2 gap-y-0.5 ll-mono text-[11px] text-[var(--ll-negative)] break-words w-full">
+                          {outlier.reasons.map((reason, rIdx) => (
+                            <span key={rIdx}>
+                              {rIdx > 0 ? '· ' : ''}
+                              {reason}
+                            </span>
+                          ))}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* 5. Export Design System (Web CSS / Tailwind v4 / iOS SwiftUI / Android Compose / JSON / Report) */}
       <section className="ll-section space-y-3">
         <div className="flex items-center justify-between gap-2">
           <span className="ll-section-title">Export design system</span>
@@ -145,7 +402,7 @@ export function PageView({
         <pre className="ll-code-block max-h-56 overflow-y-auto">{exportedOutput}</pre>
       </section>
 
-      {/* 3. Color Palette */}
+      {/* 6. Color Palette */}
       <section className="ll-section space-y-3">
         <div className="flex items-center justify-between">
           <span className="ll-section-title">Colors</span>
@@ -153,7 +410,7 @@ export function PageView({
             {designSystem.colors.length}
           </span>
         </div>
-        <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
+        <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto">
           {designSystem.colors.slice(0, 16).map((token) => (
             <button
               key={token.hex}
@@ -183,7 +440,7 @@ export function PageView({
         </div>
       </section>
 
-      {/* 4. Typography Scale */}
+      {/* 7. Typography Scale */}
       <section className="ll-section space-y-3">
         <div className="flex items-center justify-between">
           <span className="ll-section-title">Typography</span>
@@ -191,7 +448,7 @@ export function PageView({
             {designSystem.fontFamilies.map((f) => f.name).slice(0, 2).join(', ')}
           </span>
         </div>
-        <div className="space-y-1.5 max-h-60 overflow-y-auto">
+        <div className="space-y-1.5 max-h-56 overflow-y-auto">
           {designSystem.typography.slice(0, 10).map((token) => (
             <div
               key={token.id}
@@ -216,7 +473,7 @@ export function PageView({
         </div>
       </section>
 
-      {/* 5. Spacing & Border Radii */}
+      {/* 8. Spacing & Border Radii */}
       {(designSystem.spacing.length > 0 || designSystem.radii.length > 0) && (
         <section className="ll-section space-y-4">
           {designSystem.spacing.length > 0 && (
@@ -277,9 +534,9 @@ export function PageView({
         </section>
       )}
 
-      {/* 6. Collapsible Layout Containers & Flex/Grid Tree */}
+      {/* 9. Collapsible Layout Containers & Flex/Grid Tree */}
       {(designSystem.containers.length > 0 || designSystem.layoutTree.length > 0) && (
-        <section className="border-b border-[var(--ll-hairline)]">
+        <section>
           <button
             type="button"
             onClick={() => setLayoutTreeOpen((v) => !v)}
@@ -350,32 +607,6 @@ export function PageView({
               )}
             </div>
           )}
-        </section>
-      )}
-
-      {/* 7. Consistency Notes (adaptive) */}
-      {designSystem.issues.length > 0 && (
-        <section className="ll-section space-y-2.5">
-          <span className="ll-section-title">Consistency notes</span>
-          <div className="space-y-2">
-            {designSystem.issues.map((issue, idx) => (
-              <div key={`${issue.category}-${idx}`} className="ll-raised px-3 py-2.5 space-y-1">
-                <div className="flex items-center gap-2 text-[13px]">
-                  <span
-                    className="h-1.5 w-1.5 rounded-full shrink-0"
-                    style={{
-                      backgroundColor:
-                        issue.severity === 'warning' ? 'var(--ll-warn)' : 'var(--ll-accent-fill)',
-                    }}
-                  />
-                  <span>{issue.message}</span>
-                </div>
-                <div className="ll-mono text-[11px] text-[var(--ll-text-muted)] pl-3.5 break-words">
-                  {issue.values.join(' · ')}
-                </div>
-              </div>
-            ))}
-          </div>
         </section>
       )}
     </div>

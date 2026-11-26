@@ -230,7 +230,33 @@ export function ElementView({
         </section>
       )}
 
-      {/* 3. Layout Intelligence (adaptive: shown when Flex/Grid) */}
+      {/* 3. Layout Constraints Explorer */}
+      {inspection.relationships && inspection.relationships.length > 0 && (
+        <section className="ll-section space-y-2.5">
+          <span className="ll-section-title">Layout constraints</span>
+          <div className="space-y-1.5">
+            {inspection.relationships.map((rel, idx) => (
+              <button
+                key={`${rel.role}-${idx}`}
+                type="button"
+                onClick={() => onSelectSelector(rel.selector)}
+                onMouseEnter={() => onHighlightSelector(rel.selector)}
+                onMouseLeave={() => onHighlightSelector(null)}
+                className="ll-raised w-full px-3 py-2 text-left hover:bg-[var(--ll-hover)] transition-colors cursor-pointer"
+              >
+                <div className="text-[13px] font-medium text-[var(--ll-text)] truncate">
+                  {rel.summary}
+                </div>
+                <div className="ll-mono text-[11px] text-[var(--ll-text-muted)] mt-0.5 truncate">
+                  {rel.detail}
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 4. Layout Intelligence (adaptive: shown when Flex/Grid) */}
       {(layout.isFlex || layout.isGrid) && (
         <section className="ll-section space-y-3">
           <div className="flex items-center justify-between gap-2">
@@ -244,8 +270,10 @@ export function ElementView({
             {layout.insights
               .filter((i) => i.label !== 'Layout')
               .map((insight) => (
-                <div key={insight.label} className="ll-raised px-3 py-2">
-                  <div className="text-[11px] text-[var(--ll-text-muted)]">{insight.label}</div>
+                <div key={insight.label} className="ll-raised px-3 py-2 min-w-0">
+                  <div className="text-[11px] text-[var(--ll-text-muted)] truncate">
+                    {insight.label}
+                  </div>
                   <div className="ll-mono text-[13px] font-medium mt-0.5 truncate">
                     {insight.value}
                   </div>
@@ -269,21 +297,21 @@ export function ElementView({
         <BoxModelDiagram boxModel={inspection.boxModel} />
 
         <div className="grid grid-cols-3 gap-2">
-          <div className="ll-raised px-3 py-2">
+          <div className="ll-raised px-3 py-2 min-w-0">
             <div className="text-[11px] text-[var(--ll-text-muted)]">Position</div>
-            <div className="ll-mono text-[13px] font-medium mt-0.5">
+            <div className="ll-mono text-[13px] font-medium mt-0.5 truncate">
               {Math.round(geometry.x)}, {Math.round(geometry.y)}
             </div>
           </div>
-          <div className="ll-raised px-3 py-2">
+          <div className="ll-raised px-3 py-2 min-w-0">
             <div className="text-[11px] text-[var(--ll-text-muted)]">Radius</div>
             <div className="ll-mono text-[13px] font-medium mt-0.5 truncate">
               {layout.borderRadius}
             </div>
           </div>
-          <div className="ll-raised px-3 py-2">
+          <div className="ll-raised px-3 py-2 min-w-0">
             <div className="text-[11px] text-[var(--ll-text-muted)]">Ratio</div>
-            <div className="ll-mono text-[13px] font-medium mt-0.5">
+            <div className="ll-mono text-[13px] font-medium mt-0.5 truncate">
               {geometry.aspectRatio > 0 ? `${geometry.aspectRatio}:1` : '—'}
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { InspectorController } from '@/content/controller';
 import { DrawerHost } from '@/content/overlay/drawer-host';
+import { ReferenceOverlayHost } from '@/content/overlay/reference-overlay';
 import type { DrawerBridgeCommand } from '@/messaging/drawer-bridge';
 import { registerCommandListener } from '@/messaging/handlers';
 import type { CommandResponse, RuntimeCommand } from '@/messaging/protocol';
@@ -51,6 +52,7 @@ if (!window.__LAYOUTLENS_INITIALIZED__) {
 
   let drawer!: DrawerHost;
   let lastToggleTimestamp = 0;
+  const referenceOverlay = new ReferenceOverlayHost();
 
   const controller = new InspectorController({
     onEvent: (evt) => {
@@ -77,6 +79,8 @@ if (!window.__LAYOUTLENS_INITIALIZED__) {
 
   const closeDrawerAndInspect = (): void => {
     drawer.close();
+    referenceOverlay.clear();
+    controller.highlightGroup([]);
     if (controller.isActive()) {
       controller.setActive(false);
     }
@@ -153,6 +157,11 @@ if (!window.__LAYOUTLENS_INITIALIZED__) {
         controller.highlightBySelector(command.selector);
         return { ok: true };
 
+      case 'HIGHLIGHT_GROUP': {
+        const count = controller.highlightGroup(command.selectors, command.variant ?? 'pattern');
+        return { ok: true, data: { count } };
+      }
+
       case 'NAVIGATE_DOM': {
         const inspection = controller.navigateSelection(command.direction);
         return { ok: Boolean(inspection), data: inspection };
@@ -178,6 +187,13 @@ if (!window.__LAYOUTLENS_INITIALIZED__) {
         drawer.setTheme(command.theme);
         controller.setTheme(command.theme);
         return { ok: true };
+
+      case 'UPDATE_REFERENCE_OVERLAY':
+        referenceOverlay.update(command.state);
+        return { ok: true, data: referenceOverlay.getState() };
+
+      case 'GET_REFERENCE_OVERLAY':
+        return { ok: true, data: referenceOverlay.getState() };
 
       case 'COPY_TEXT': {
         const copied = await copyTextInHostPage(command.text);

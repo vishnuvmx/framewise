@@ -98,6 +98,16 @@ export function exportElementSwiftUI(el: ElementInspection): string {
     `.frame(width: ${Math.round(geometry.width)}, height: ${Math.round(geometry.height)})`
   );
 
+  const notes: string[] = [];
+  if (layout.boxShadow && layout.boxShadow !== 'none') notes.push('box-shadow');
+  if (geometry.isTransformed) notes.push('CSS transform');
+  if (layout.position === 'fixed' || layout.position === 'sticky') {
+    notes.push(`position: ${layout.position}`);
+  }
+  if (notes.length > 0) {
+    lines.push(`// Approximate from rendered CSS — manually adapt: ${notes.join(', ')}`);
+  }
+
   return lines.join('\n');
 }
 

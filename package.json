@@ -1,8 +1,8 @@
 {
   "name": "layoutlens",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": false,
-  "description": "A visual website inspection toolkit for developers and designers. Explore layouts, inspect CSS, measure spacing, and extract design tokens directly from your browser.",
+  "description": "Understand. Analyze. Verify. A local-first visual development toolkit for inspecting rendered interfaces, discovering component patterns, and verifying design implementations.",
   "license": "MIT",
   "type": "module",
   "scripts": {

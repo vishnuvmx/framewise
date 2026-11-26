@@ -1,4 +1,6 @@
+import { buildDesignBlueprint } from '@/core/blueprint';
 import { extractColorPalette, extractElementColors } from '@/core/colors';
+import { discoverComponents } from '@/core/components';
 import { extractBoxModel, extractGeometry } from '@/core/geometry';
 import { extractAncestors, extractDirectChildren } from '@/core/hierarchy';
 import {
@@ -7,6 +9,7 @@ import {
   extractLayoutTree,
   extractViewportInfo,
 } from '@/core/layout';
+import { extractLayoutRelationships } from '@/core/layout/relationships';
 import { isInsideShadowDom, scanVisibleElements } from '@/core/scanner';
 import { buildCopyableCss, extractComputedGroups } from '@/core/styles';
 import { extractTypography, extractTypographyScale } from '@/core/typography';
@@ -53,6 +56,7 @@ export function inspectElement(
   const copyableCss = buildCopyableCss(selector, computedGroups);
   const ancestors = extractAncestors(element, getStyle);
   const children = extractDirectChildren(element, getStyle);
+  const relationships = extractLayoutRelationships(element, getStyle);
 
   const rawText = (element.textContent ?? '').replace(/\s+/g, ' ').trim();
   const textPreview = rawText.length > 72 ? `${rawText.slice(0, 72)}…` : rawText;
@@ -75,6 +79,7 @@ export function inspectElement(
     copyableCss,
     ancestors,
     children,
+    relationships,
   };
 }
 
@@ -231,6 +236,17 @@ export function analyzeDesignSystem(
   const containers = extractContainerWidths(elements, getStyle, viewport.width);
   const layoutTree = extractLayoutTree(elements, getStyle);
   const issues = detectConsistencyIssues(colors, spacing, typography, radii);
+  const { components, consistencyReports } = discoverComponents(elements, getStyle);
+  const blueprint = buildDesignBlueprint({
+    viewport,
+    colors,
+    typography,
+    fontFamilies,
+    spacing,
+    containers,
+    layoutTree,
+    components,
+  });
 
   return {
     url: viewport.url,
@@ -246,5 +262,8 @@ export function analyzeDesignSystem(
     containers,
     layoutTree,
     issues,
+    components,
+    consistencyReports,
+    blueprint,
   };
 }
