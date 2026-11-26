@@ -86,11 +86,11 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
         {/* Top Upload Surface */}
         <div className="p-5 space-y-4">
           <div className="space-y-1">
-            <h2 className="text-[16px] font-medium text-[var(--ll-text)]">
+            <h2 className="text-[16px] font-medium text-[var(--fw-text)]">
               Design vs live comparison
             </h2>
-            <p className="text-[13px] text-[var(--ll-text-secondary)]">
-              Overlay a Figma export over this webpage to check spacing, alignment, and type
+            <p className="text-[13px] text-[var(--fw-text-secondary)]">
+              Overlay a design export over this webpage to check spacing, alignment, and type
             </p>
           </div>
 
@@ -117,8 +117,8 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
             onDrop={handleDrop}
             className={`w-full rounded-[10px] border p-6 flex flex-col items-center text-center gap-3 transition-colors cursor-pointer ${
               dragging
-                ? 'border-[var(--ll-accent)] bg-[var(--ll-accent-soft)]'
-                : 'border-[var(--ll-hairline-strong)] bg-[var(--ll-surface)] hover:bg-[var(--ll-raised)]'
+                ? 'border-[var(--fw-accent)] bg-[var(--fw-accent-soft)]'
+                : 'border-[var(--fw-hairline-strong)] bg-[var(--fw-surface)] hover:bg-[var(--fw-raised)]'
             }`}
           >
             {/* Drafted split-frame schematic icon */}
@@ -128,7 +128,7 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
               viewBox="0 0 44 32"
               fill="none"
               aria-hidden="true"
-              className="text-[var(--ll-text-muted)]"
+              className="text-[var(--fw-text-muted)]"
             >
               <rect
                 x="1"
@@ -153,39 +153,39 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
                 strokeDasharray="2 2"
                 opacity="0.6"
               />
-              <line x1="22" y1="1" x2="22" y2="31" stroke="var(--ll-accent-fill)" strokeWidth="1.5" />
+              <line x1="22" y1="1" x2="22" y2="31" stroke="var(--fw-accent-fill)" strokeWidth="1.5" />
             </svg>
 
             <div className="space-y-0.5">
-              <div className="text-[14px] font-medium text-[var(--ll-text)]">
-                {dragging ? 'Drop image to overlay' : 'Drop Figma PNG or click to browse'}
+              <div className="text-[14px] font-medium text-[var(--fw-text)]">
+                {dragging ? 'Drop image to overlay' : 'Drop a design export or click to browse'}
               </div>
-              <div className="text-[12px] text-[var(--ll-text-muted)]">PNG, JPG, or WebP</div>
+              <div className="text-[12px] text-[var(--fw-text-muted)]">PNG, JPG, or WebP</div>
             </div>
 
-            <div className="pt-1 inline-flex items-center gap-1.5 text-[12px] text-[var(--ll-text-muted)]">
+            <div className="pt-1 inline-flex items-center gap-1.5 text-[12px] text-[var(--fw-text-muted)]">
               <span>or paste from clipboard</span>
-              <kbd className="ll-kbd">Ctrl</kbd>
-              <kbd className="ll-kbd">V</kbd>
+              <kbd className="fw-kbd">Ctrl</kbd>
+              <kbd className="fw-kbd">V</kbd>
             </div>
           </button>
         </div>
 
         {/* Bottom-Pinned Visual QA Notes */}
-        <div className="border-t border-[var(--ll-hairline)] px-5 py-4 space-y-2.5 bg-[var(--ll-surface)]">
-          <div className="ll-section-title">Tips for visual QA</div>
-          <div className="space-y-2 text-[12px] leading-5 text-[var(--ll-text-secondary)]">
+        <div className="border-t border-[var(--fw-hairline)] px-5 py-4 space-y-2.5 bg-[var(--fw-surface)]">
+          <div className="fw-section-title">Tips for visual QA</div>
+          <div className="space-y-2 text-[12px] leading-5 text-[var(--fw-text-secondary)]">
             <div className="flex items-start gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--ll-text-muted)] mt-2 shrink-0" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--fw-text-muted)] mt-2 shrink-0" />
               <span>
-                <strong className="font-medium text-[var(--ll-text)]">Difference mode</strong>{' '}
+                <strong className="font-medium text-[var(--fw-text)]">Difference mode</strong>{' '}
                 exposes 1px spacing or font shifts — exact pixel matches render pure black
               </span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--ll-text-muted)] mt-2 shrink-0" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--fw-text-muted)] mt-2 shrink-0" />
               <span>
-                <strong className="font-medium text-[var(--ll-text)]">Click-through</strong>{' '}
+                <strong className="font-medium text-[var(--fw-text)]">Click-through</strong>{' '}
                 overlay lets you toggle live inspection and measure DOM nodes right beneath your
                 design
               </span>
@@ -199,16 +199,16 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
   return (
     <div>
       {/* Reference File Header */}
-      <section className="ll-section bg-[var(--ll-surface)] flex items-center justify-between gap-3">
+      <section className="fw-section bg-[var(--fw-surface)] flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <img
             src={reference.imageDataUrl}
             alt="Design reference preview"
-            className="h-10 w-10 rounded-[6px] object-cover border border-[var(--ll-hairline-strong)] shrink-0"
+            className="h-10 w-10 rounded-[6px] object-cover border border-[var(--fw-hairline-strong)] shrink-0"
           />
           <div className="min-w-0">
             <div className="text-[13px] font-medium truncate">{reference.imageName}</div>
-            <div className="ll-mono text-[12px] text-[var(--ll-text-muted)]">
+            <div className="fw-mono text-[12px] text-[var(--fw-text-muted)]">
               {reference.naturalWidth} × {reference.naturalHeight}px · {reference.scale}×
             </div>
           </div>
@@ -220,7 +220,7 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
             onClick={() => patch({ visible: !reference.visible })}
             title={reference.visible ? 'Hide reference' : 'Show reference'}
             aria-label={reference.visible ? 'Hide reference' : 'Show reference'}
-            className="ll-icon-btn"
+            className="fw-icon-btn"
           >
             {reference.visible ? (
               <Eye className="h-4 w-4" strokeWidth={1.5} />
@@ -233,7 +233,7 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
             onClick={() => onUpdate(null)}
             title="Remove reference image"
             aria-label="Remove reference image"
-            className="ll-icon-btn"
+            className="fw-icon-btn"
           >
             <Trash2 className="h-4 w-4" strokeWidth={1.5} />
           </button>
@@ -241,9 +241,9 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
       </section>
 
       {/* Blend Mode Switcher */}
-      <section className="ll-section space-y-4">
-        <span className="ll-section-title">Compare mode</span>
-        <div className="grid grid-cols-3 gap-1 p-1 rounded-[8px] bg-[var(--ll-raised)] border border-[var(--ll-hairline)]">
+      <section className="fw-section space-y-4">
+        <span className="fw-section-title">Compare mode</span>
+        <div className="grid grid-cols-3 gap-1 p-1 rounded-[8px] bg-[var(--fw-raised)] border border-[var(--fw-hairline)]">
           {(
             [
               ['normal', 'Overlay'],
@@ -257,8 +257,8 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
               onClick={() => patch({ blendMode: id, visible: true })}
               className={`h-8 rounded-[6px] text-[13px] transition-colors cursor-pointer ${
                 reference.blendMode === id
-                  ? 'bg-[var(--ll-surface)] text-[var(--ll-text)] font-medium border border-[var(--ll-hairline)]'
-                  : 'text-[var(--ll-text-muted)] hover:text-[var(--ll-text)]'
+                  ? 'bg-[var(--fw-surface)] text-[var(--fw-text)] font-medium border border-[var(--fw-hairline)]'
+                  : 'text-[var(--fw-text-muted)] hover:text-[var(--fw-text)]'
               }`}
             >
               {label}
@@ -269,8 +269,8 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
         {reference.blendMode === 'split' ? (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-[13px]">
-              <span className="text-[var(--ll-text-secondary)]">Split curtain</span>
-              <span className="ll-mono text-[12px]">{Math.round(reference.splitPercent)}%</span>
+              <span className="text-[var(--fw-text-secondary)]">Split curtain</span>
+              <span className="fw-mono text-[12px]">{Math.round(reference.splitPercent)}%</span>
             </div>
             <input
               type="range"
@@ -279,14 +279,14 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
               step={1}
               value={reference.splitPercent}
               onChange={(e) => patch({ splitPercent: Number(e.target.value) })}
-              className="w-full accent-[var(--ll-accent-fill)] cursor-pointer"
+              className="w-full accent-[var(--fw-accent-fill)] cursor-pointer"
             />
           </div>
         ) : (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-[13px]">
-              <span className="text-[var(--ll-text-secondary)]">Opacity</span>
-              <span className="ll-mono text-[12px]">{Math.round(reference.opacity * 100)}%</span>
+              <span className="text-[var(--fw-text-secondary)]">Opacity</span>
+              <span className="fw-mono text-[12px]">{Math.round(reference.opacity * 100)}%</span>
             </div>
             <input
               type="range"
@@ -295,7 +295,7 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
               step={1}
               value={Math.round(reference.opacity * 100)}
               onChange={(e) => patch({ opacity: Number(e.target.value) / 100 })}
-              className="w-full accent-[var(--ll-accent-fill)] cursor-pointer"
+              className="w-full accent-[var(--fw-accent-fill)] cursor-pointer"
             />
             <div className="grid grid-cols-4 gap-1.5">
               {[0.25, 0.5, 0.75, 1].map((val) => (
@@ -303,7 +303,7 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
                   key={val}
                   type="button"
                   onClick={() => patch({ opacity: val })}
-                  className="ll-btn ll-btn-secondary ll-btn-sm ll-mono"
+                  className="fw-btn fw-btn-secondary fw-btn-sm fw-mono"
                 >
                   {val * 100}%
                 </button>
@@ -314,15 +314,15 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
       </section>
 
       {/* Scale & Pixel Nudge */}
-      <section className="ll-section space-y-4">
+      <section className="fw-section space-y-4">
         <div className="flex items-center justify-between gap-2">
-          <span className="ll-section-title">Scale & alignment</span>
+          <span className="fw-section-title">Scale & alignment</span>
           <button
             type="button"
             onClick={() => patch({ offsetX: 0, offsetY: 0, scale: 1 })}
-            className="ll-btn ll-btn-secondary ll-btn-sm"
+            className="fw-btn fw-btn-secondary fw-btn-sm"
           >
-            <RotateCcw className="h-3.5 w-3.5 text-[var(--ll-text-muted)]" strokeWidth={1.5} />
+            <RotateCcw className="h-3.5 w-3.5 text-[var(--fw-text-muted)]" strokeWidth={1.5} />
             <span>Reset</span>
           </button>
         </div>
@@ -337,10 +337,10 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
               key={preset.label}
               type="button"
               onClick={() => patch({ scale: preset.val })}
-              className={`ll-btn ll-btn-sm ${
+              className={`fw-btn fw-btn-sm ${
                 Math.abs(reference.scale - preset.val) < 0.01
-                  ? 'll-btn-primary'
-                  : 'll-btn-secondary'
+                  ? 'fw-btn-primary'
+                  : 'fw-btn-secondary'
               }`}
             >
               {preset.label}
@@ -356,7 +356,7 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
             ] as const
           ).map(([label, key, value]) => (
             <div key={key} className="flex items-center justify-between gap-2">
-              <span className="text-[13px] text-[var(--ll-text-secondary)] w-16 shrink-0">
+              <span className="text-[13px] text-[var(--fw-text-secondary)] w-16 shrink-0">
                 {label}
               </span>
               <div className="flex items-center gap-1">
@@ -365,26 +365,26 @@ export function CompareView({ reference, viewport, onUpdate }: CompareViewProps)
                     key={delta}
                     type="button"
                     onClick={() => patch({ [key]: value + delta })}
-                    className="ll-btn ll-btn-secondary ll-btn-sm ll-mono !px-2"
+                    className="fw-btn fw-btn-secondary fw-btn-sm fw-mono !px-2"
                   >
                     {delta > 0 ? `+${delta}` : delta}
                   </button>
                 ))}
               </div>
-              <span className="ll-mono text-[12px] w-12 text-right shrink-0">{value}px</span>
+              <span className="fw-mono text-[12px] w-12 text-right shrink-0">{value}px</span>
             </div>
           ))}
         </div>
 
         <label className="flex items-center justify-between gap-3 pt-1 cursor-pointer">
-          <span className="text-[13px] text-[var(--ll-text-secondary)]">
+          <span className="text-[13px] text-[var(--fw-text-secondary)]">
             Lock reference to page scroll
           </span>
           <input
             type="checkbox"
             checked={reference.lockToScroll}
             onChange={(e) => patch({ lockToScroll: e.target.checked })}
-            className="h-4 w-4 accent-[var(--ll-accent-fill)] cursor-pointer"
+            className="h-4 w-4 accent-[var(--fw-accent-fill)] cursor-pointer"
           />
         </label>
       </section>

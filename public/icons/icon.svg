@@ -1,6 +1,6 @@
 <svg width="90" height="91" viewBox="-2 -2 94 95" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="ll-mark-grad" x1="8" y1="84" x2="78" y2="4" gradientUnits="userSpaceOnUse">
+    <linearGradient id="fw-mark-grad" x1="8" y1="84" x2="78" y2="4" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#FF00EE" />
       <stop offset="68%" stop-color="#FF29F1" />
       <stop offset="100%" stop-color="#FF99F8" />
@@ -8,6 +8,6 @@
   </defs>
   <path
     d="M0 30.2285C24.6053 38.7171 35.3176 -7.4417 59.9229 1.04688C84.5285 9.53607 64.499 52.4814 89.1045 60.9707C64.4989 52.4816 37.6699 65.5467 29.1807 90.1523C37.6698 65.5468 24.6055 38.7178 0 30.2285ZM52.8965 4.44434C43.7838 4.44434 36.3965 11.8316 36.3965 20.9443C36.3965 30.057 43.7838 37.4443 52.8965 37.4443C62.0091 37.4443 69.3964 30.057 69.3965 20.9443C69.3965 11.8316 62.0092 4.44434 52.8965 4.44434Z"
-    fill="url(#ll-mark-grad)"
+    fill="url(#fw-mark-grad)"
   />
 </svg>

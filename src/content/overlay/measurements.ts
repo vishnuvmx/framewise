@@ -37,7 +37,7 @@ function drawMeasurementLine(
   }
 
   const pill = document.createElement('span');
-  pill.className = 'll-pill ll-pill--measure';
+  pill.className = 'fw-pill fw-pill--measure';
   pill.style.left = `${Math.round((x1 + x2) / 2)}px`;
   pill.style.top = `${Math.round((y1 + y2) / 2)}px`;
   pill.textContent = formatPx(distance);

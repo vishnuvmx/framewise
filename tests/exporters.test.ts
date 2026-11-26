@@ -177,10 +177,10 @@ describe('Exporters & Messaging Protocol', () => {
   it('exports valid CSS custom properties', () => {
     const css = exportCssVariables(sampleSummary);
     expect(css).toContain(':root {');
-    expect(css).toContain('--ll-color-brand-1: #4F46E5;');
-    expect(css).toContain('--ll-text-display: 36px;');
-    expect(css).toContain('--ll-space-1: 24px;');
-    expect(css).toContain('--ll-radius-xs: 12px;');
+    expect(css).toContain('--fw-color-brand-1: #4F46E5;');
+    expect(css).toContain('--fw-text-display: 36px;');
+    expect(css).toContain('--fw-space-1: 24px;');
+    expect(css).toContain('--fw-radius-xs: 12px;');
   });
 
   it('exports Tailwind v4 theme and element utility classes', () => {
@@ -262,7 +262,7 @@ describe('Exporters & Messaging Protocol', () => {
 
   it('exports Markdown inspection report', () => {
     const md = exportInspectionReport(sampleSummary, null);
-    expect(md).toContain('# LayoutLens Inspection Report');
+    expect(md).toContain('# Framewise Inspection Report');
     expect(md).toContain('1440 × 900px');
     expect(md).toContain('#4F46E5');
   });

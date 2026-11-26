@@ -1,9 +1,9 @@
 import type { OverlayOptions } from '@/shared/types';
 
-export const OVERLAY_HOST_ID = 'layoutlens-overlay-host';
-export const DRAWER_HOST_ID = 'layoutlens-drawer-host';
-export const REFERENCE_HOST_ID = 'layoutlens-reference-host';
-export const OVERLAY_DATA_ATTR = 'data-layoutlens-ignore';
+export const OVERLAY_HOST_ID = 'framewise-overlay-host';
+export const DRAWER_HOST_ID = 'framewise-drawer-host';
+export const REFERENCE_HOST_ID = 'framewise-reference-host';
+export const OVERLAY_DATA_ATTR = 'data-framewise-ignore';
 export const REFERENCE_Z_INDEX = 2147483645;
 export const OVERLAY_Z_INDEX = 2147483646;
 export const DRAWER_Z_INDEX = 2147483647;
@@ -35,9 +35,9 @@ export const DEFAULT_OVERLAY_OPTIONS: OverlayOptions = {
 };
 
 export const STORAGE_KEYS = {
-  activeTabs: 'layoutlens_active_tabs',
-  overlayOptions: 'layoutlens_overlay_options',
-  themePreference: 'layoutlens-color-scheme',
+  activeTabs: 'framewise_active_tabs',
+  overlayOptions: 'framewise_overlay_options',
+  themePreference: 'framewise-color-scheme',
 } as const;
 
 export const SKIPPED_TAGS = new Set([

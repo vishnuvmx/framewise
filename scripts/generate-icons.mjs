@@ -1,5 +1,5 @@
 /**
- * Zero-dependency PNG icon generator for LayoutLens (16x16, 48x48, 128x128).
+ * Zero-dependency PNG icon generator for Framewise (16x16, 48x48, 128x128).
  * Flat architectural graphite tile with crisp white viewfinder frame and a single
  * drafting-blue center reticle — zero hue gradients or glows.
  */

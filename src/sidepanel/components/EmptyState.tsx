@@ -18,8 +18,8 @@ export function EmptyState({
       <img src="/icons/icon.svg" alt="" width={40} height={40} className="h-10 w-10 shrink-0" />
 
       <div className="space-y-1.5 max-w-[320px]">
-        <h2 className="text-[17px] font-medium leading-6 text-[var(--ll-text)]">{title}</h2>
-        <p className="text-[14px] leading-6 text-[var(--ll-text-secondary)]">{description}</p>
+        <h2 className="text-[17px] font-medium leading-6 text-[var(--fw-text)]">{title}</h2>
+        <p className="text-[14px] leading-6 text-[var(--fw-text-secondary)]">{description}</p>
       </div>
 
       <div className="flex items-center gap-3">
@@ -27,7 +27,7 @@ export function EmptyState({
           <button
             type="button"
             onClick={onAction}
-            className="ll-btn ll-btn-primary !h-10 !px-4 !text-[14px]"
+            className="fw-btn fw-btn-primary !h-10 !px-4 !text-[14px]"
           >
             {actionLabel}
           </button>
@@ -35,7 +35,7 @@ export function EmptyState({
         {shortcut && shortcut.length > 0 && (
           <div className="inline-flex items-center gap-1" aria-label={`Shortcut ${shortcut.join(' ')}`}>
             {shortcut.map((key) => (
-              <kbd key={key} className="ll-kbd">
+              <kbd key={key} className="fw-kbd">
                 {key}
               </kbd>
             ))}

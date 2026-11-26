@@ -20,7 +20,7 @@ const DRAWER_CSS = `
   font-family: "DM Sans Variable", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-.ll-drawer {
+.fw-drawer {
   position: fixed;
   top: 0;
   right: 0;
@@ -40,17 +40,17 @@ const DRAWER_CSS = `
   transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.ll-drawer[data-theme="light"] {
+.fw-drawer[data-theme="light"] {
   background: #fafafa;
   border-left-color: rgba(23, 23, 23, 0.1);
 }
 
-.ll-drawer.is-open {
+.fw-drawer.is-open {
   transform: translateX(0);
   pointer-events: auto;
 }
 
-.ll-drawer__frame {
+.fw-drawer__frame {
   display: block;
   width: 100%;
   height: 100%;
@@ -59,7 +59,7 @@ const DRAWER_CSS = `
 }
 
 /* Slim right-edge pull-tab shown only when the drawer is collapsed */
-.ll-edge-tab {
+.fw-edge-tab {
   all: unset;
   box-sizing: border-box;
   position: fixed;
@@ -83,33 +83,33 @@ const DRAWER_CSS = `
     background-color 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.ll-edge-tab[data-theme="light"] {
+.fw-edge-tab[data-theme="light"] {
   background: #ffffff;
   color: #171717;
   border-color: rgba(23, 23, 23, 0.12);
 }
 
-.ll-edge-tab.is-visible {
+.fw-edge-tab.is-visible {
   transform: translate(0, -50%);
   pointer-events: auto;
 }
 
-.ll-edge-tab:hover {
+.fw-edge-tab:hover {
   background: #232325;
 }
 
-.ll-edge-tab[data-theme="light"]:hover {
+.fw-edge-tab[data-theme="light"]:hover {
   background: #f4f4f5;
 }
 
-.ll-edge-tab:focus-visible {
+.fw-edge-tab:focus-visible {
   outline: 2px solid #3b82f6;
   outline-offset: -2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ll-drawer,
-  .ll-edge-tab {
+  .fw-drawer,
+  .fw-edge-tab {
     transition-duration: 0.01ms !important;
   }
 }
@@ -346,22 +346,22 @@ export class DrawerHost {
     }
 
     const drawer = document.createElement('div');
-    drawer.className = 'll-drawer';
+    drawer.className = 'fw-drawer';
     drawer.setAttribute(OVERLAY_DATA_ATTR, 'true');
 
     const frame = document.createElement('iframe');
-    frame.className = 'll-drawer__frame';
+    frame.className = 'fw-drawer__frame';
     frame.src = `${chrome.runtime.getURL('src/sidepanel/index.html')}#token=${this.token}`;
-    frame.title = 'LayoutLens Inspector';
+    frame.title = 'Framewise Inspector';
     frame.setAttribute('allow', 'clipboard-write');
     drawer.appendChild(frame);
 
     const edgeTab = document.createElement('button');
     edgeTab.type = 'button';
-    edgeTab.className = 'll-edge-tab';
+    edgeTab.className = 'fw-edge-tab';
     edgeTab.setAttribute(OVERLAY_DATA_ATTR, 'true');
-    edgeTab.setAttribute('aria-label', 'Expand LayoutLens sidebar');
-    edgeTab.title = 'Expand LayoutLens';
+    edgeTab.setAttribute('aria-label', 'Expand Framewise sidebar');
+    edgeTab.title = 'Expand Framewise';
     edgeTab.innerHTML =
       '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
     edgeTab.addEventListener('click', (e) => {

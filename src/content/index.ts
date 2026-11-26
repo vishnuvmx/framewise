@@ -7,7 +7,7 @@ import type { CommandResponse, RuntimeCommand } from '@/messaging/protocol';
 
 declare global {
   interface Window {
-    __LAYOUTLENS_INITIALIZED__?: boolean;
+    __FRAMEWISE_INITIALIZED__?: boolean;
   }
 }
 
@@ -19,7 +19,7 @@ async function copyTextInHostPage(text: string): Promise<boolean> {
     try {
       const textarea = document.createElement('textarea');
       textarea.value = text;
-      textarea.setAttribute('data-layoutlens-ignore', 'true');
+      textarea.setAttribute('data-framewise-ignore', 'true');
       textarea.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
       document.body.appendChild(textarea);
       textarea.select();
@@ -47,8 +47,8 @@ function isEditableElement(target: EventTarget | null): boolean {
   return (target as HTMLElement).isContentEditable === true;
 }
 
-if (!window.__LAYOUTLENS_INITIALIZED__) {
-  window.__LAYOUTLENS_INITIALIZED__ = true;
+if (!window.__FRAMEWISE_INITIALIZED__) {
+  window.__FRAMEWISE_INITIALIZED__ = true;
 
   let drawer!: DrawerHost;
   let lastToggleTimestamp = 0;

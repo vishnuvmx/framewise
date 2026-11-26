@@ -164,7 +164,7 @@ describe('Core Inspection & Analysis Engine', () => {
     const grid = document.createElement('div');
     grid.className = 'cards-grid';
     const heading = document.createElement('h1');
-    heading.textContent = 'LayoutLens Demo';
+    heading.textContent = 'Framewise Demo';
     const bodyText = document.createElement('p');
     bodyText.textContent = 'Explore rendered styles and spacing.';
 

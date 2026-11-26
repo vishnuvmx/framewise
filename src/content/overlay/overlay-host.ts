@@ -17,7 +17,7 @@ const OVERLAY_CSS = `
   color: #ededed;
 }
 
-.ll-svg {
+.fw-svg {
   position: fixed;
   inset: 0;
   width: 100vw;
@@ -26,14 +26,14 @@ const OVERLAY_CSS = `
   overflow: visible;
 }
 
-.ll-labels {
+.fw-labels {
   position: fixed;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
 }
 
-.ll-badge {
+.fw-badge {
   position: fixed;
   display: inline-flex;
   align-items: center;
@@ -53,25 +53,25 @@ const OVERLAY_CSS = `
   box-shadow: none;
 }
 
-.ll-badge--selected {
+.fw-badge--selected {
   background: #19191b;
   border-color: rgba(96, 165, 250, 0.45);
 }
 
-.ll-badge__tag {
+.fw-badge__tag {
   color: #60a5fa;
 }
 
-.ll-badge--selected .ll-badge__tag {
+.fw-badge--selected .fw-badge__tag {
   color: #ededed;
 }
 
-.ll-badge__dims {
+.fw-badge__dims {
   color: #a1a1a6;
   font-weight: 400;
 }
 
-.ll-badge__layout {
+.fw-badge__layout {
   padding: 1px 5px;
   border-radius: 4px;
   font-size: 11px;
@@ -79,17 +79,17 @@ const OVERLAY_CSS = `
   letter-spacing: 0;
 }
 
-.ll-badge__layout--flex {
+.fw-badge__layout--flex {
   background: rgba(124, 58, 237, 0.22);
   color: #d8b4fe;
 }
 
-.ll-badge__layout--grid {
+.fw-badge__layout--grid {
   background: rgba(219, 39, 119, 0.22);
   color: #f9a8d4;
 }
 
-.ll-pill {
+.fw-pill {
   position: fixed;
   transform: translate(-50%, -50%);
   padding: 2px 5px;
@@ -104,23 +104,23 @@ const OVERLAY_CSS = `
   box-shadow: none;
 }
 
-.ll-pill--measure {
+.fw-pill--measure {
   background: #e11d48;
   color: #ffffff;
 }
 
-.ll-pill--padding {
+.fw-pill--padding {
   background: #14532d;
   color: #dcfce7;
 }
 
-.ll-pill--margin {
+.fw-pill--margin {
   background: #78350f;
   color: #fef3c7;
 }
 
 /* Flat bottom-left floating bar: outer 10px - padding 4px = inner button 6px */
-.ll-hud {
+.fw-hud {
   position: fixed;
   left: 16px;
   bottom: 16px;
@@ -137,13 +137,13 @@ const OVERLAY_CSS = `
   user-select: none;
 }
 
-.ll-hud[data-theme="light"] {
+.fw-hud[data-theme="light"] {
   background: #ffffff;
   color: #171717;
   border-color: rgba(23, 23, 23, 0.12);
 }
 
-.ll-hud__label {
+.fw-hud__label {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -153,25 +153,25 @@ const OVERLAY_CSS = `
   color: inherit;
 }
 
-.ll-hud__dot {
+.fw-hud__dot {
   width: 7px;
   height: 7px;
   border-radius: 999px;
   background: #4cc38a;
 }
 
-.ll-hud__dot--locked {
+.fw-hud__dot--locked {
   background: #3b82f6;
 }
 
-.ll-hud__sep {
+.fw-hud__sep {
   width: 1px;
   height: 16px;
   background: rgba(128, 128, 136, 0.24);
   margin: 0 2px;
 }
 
-.ll-hud__btn {
+.fw-hud__btn {
   all: unset;
   box-sizing: border-box;
   cursor: pointer;
@@ -190,38 +190,38 @@ const OVERLAY_CSS = `
     border-color 140ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.ll-hud[data-theme="light"] .ll-hud__btn {
+.fw-hud[data-theme="light"] .fw-hud__btn {
   color: #525252;
 }
 
-.ll-hud__btn:hover {
+.fw-hud__btn:hover {
   background: #232325;
   color: #ededed;
 }
 
-.ll-hud[data-theme="light"] .ll-hud__btn:hover {
+.fw-hud[data-theme="light"] .fw-hud__btn:hover {
   background: #f4f4f5;
   color: #171717;
 }
 
-.ll-hud__btn--active {
+.fw-hud__btn--active {
   background: #232325;
   color: #ededed;
   font-weight: 500;
   border-color: rgba(237, 237, 237, 0.14);
 }
 
-.ll-hud[data-theme="light"] .ll-hud__btn--active {
+.fw-hud[data-theme="light"] .fw-hud__btn--active {
   background: #f4f4f5;
   color: #171717;
   border-color: rgba(23, 23, 23, 0.12);
 }
 
-.ll-hud__btn--close {
+.fw-hud__btn--close {
   padding: 0 9px;
 }
 
-.ll-hud__btn--close:hover {
+.fw-hud__btn--close:hover {
   background: rgba(229, 72, 77, 0.16);
   color: #e5484d;
 }
@@ -274,14 +274,14 @@ export class OverlayHost {
     }
 
     const svg = document.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('class', 'll-svg');
+    svg.setAttribute('class', 'fw-svg');
     svg.setAttribute('aria-hidden', 'true');
 
     const labels = document.createElement('div');
-    labels.className = 'll-labels';
+    labels.className = 'fw-labels';
 
     const hud = document.createElement('div');
-    hud.className = 'll-hud';
+    hud.className = 'fw-hud';
     hud.setAttribute(OVERLAY_DATA_ATTR, 'true');
 
     shadow.append(svg, labels, hud);
@@ -331,17 +331,17 @@ export class OverlayHost {
     const frag = document.createDocumentFragment();
 
     const label = document.createElement('span');
-    label.className = 'll-hud__label';
+    label.className = 'fw-hud__label';
 
     const dot = document.createElement('span');
-    dot.className = locked ? 'll-hud__dot ll-hud__dot--locked' : 'll-hud__dot';
+    dot.className = locked ? 'fw-hud__dot fw-hud__dot--locked' : 'fw-hud__dot';
 
     const text = document.createElement('span');
     text.textContent = locked ? 'Locked' : 'Inspecting';
     label.append(dot, text);
 
     const sep1 = document.createElement('span');
-    sep1.className = 'll-hud__sep';
+    sep1.className = 'fw-hud__sep';
 
     const boxBtn = this.makeHudButton(
       'Box',
@@ -366,7 +366,7 @@ export class OverlayHost {
 
     if (locked) {
       const sep2 = document.createElement('span');
-      sep2.className = 'll-hud__sep';
+      sep2.className = 'fw-hud__sep';
       const unlockBtn = this.makeHudButton('Unlock', 'Unlock selection (Esc)', false, () =>
         this.callbacks.onUnlock()
       );
@@ -375,7 +375,7 @@ export class OverlayHost {
 
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
-    closeBtn.className = 'll-hud__btn ll-hud__btn--close';
+    closeBtn.className = 'fw-hud__btn fw-hud__btn--close';
     closeBtn.textContent = '×';
     closeBtn.title = 'Pause inspecting (Esc)';
     closeBtn.addEventListener('click', (e) => {
@@ -407,7 +407,7 @@ export class OverlayHost {
   ): HTMLButtonElement {
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = active ? 'll-hud__btn ll-hud__btn--active' : 'll-hud__btn';
+    btn.className = active ? 'fw-hud__btn fw-hud__btn--active' : 'fw-hud__btn';
     btn.textContent = label;
     btn.title = title;
     btn.addEventListener('click', (e) => {

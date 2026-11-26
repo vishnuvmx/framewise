@@ -1,16 +1,16 @@
 # Changelog
 
-All notable changes to **LayoutLens** are documented in this file.
+All notable changes to **Framewise** are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.4.0] — 2026-11-26
 
-**Understand. Analyze. Verify.** — First full release featuring visual inspection, page design-system analysis, component drift detection, and local Figma-to-live comparison.
+**Understand. Analyze. Verify.** — First full release featuring visual inspection, page design-system analysis, component drift detection, and local design-to-live comparison.
 
 ### Added
 - **Compare Mode (Design-to-Reality Visual QA)**:
-  - Drag-and-drop, file picker, or `Ctrl+V` clipboard paste for Figma PNG/JPG/WebP exports directly over the active webpage.
+  - Drag-and-drop, file picker, or `Ctrl+V` clipboard paste for PNG/JPG/WebP design exports directly over the active webpage.
   - `Overlay` (adjustable opacity), `Difference` (`mix-blend-mode: difference` for 1px diffing), and `Split` (draggable curtain) blend modes.
   - `@2x` / `@3x` Retina auto-scaling (`0.5×`, `1×`, `2×`), `±1px` / `±10px` `X`/`Y` nudging, scroll lock toggle, and click-through live DOM inspection underneath the reference frame.
 - **Interface Intelligence (`Page` mode)**:

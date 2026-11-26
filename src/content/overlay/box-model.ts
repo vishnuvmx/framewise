@@ -35,7 +35,7 @@ function addEdgePill(
   const maxX = Math.max(40, window.innerWidth - rightInset - 16);
   if (x < 16 || x > maxX || y < 14 || y > window.innerHeight - 14) return;
   const pill = document.createElement('span');
-  pill.className = `ll-pill ll-pill--${variant}`;
+  pill.className = `fw-pill fw-pill--${variant}`;
   pill.style.left = `${Math.round(x)}px`;
   pill.style.top = `${Math.round(y)}px`;
   pill.textContent = formatPx(value);

@@ -25,14 +25,14 @@ const REFERENCE_CSS = `
   pointer-events: none;
 }
 
-.ll-ref-layer {
+.fw-ref-layer {
   position: fixed;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
 }
 
-.ll-ref-img {
+.fw-ref-img {
   position: fixed;
   top: 0;
   left: 0;
@@ -43,7 +43,7 @@ const REFERENCE_CSS = `
   image-rendering: auto;
 }
 
-.ll-ref-divider {
+.fw-ref-divider {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -115,15 +115,15 @@ export class ReferenceOverlayHost {
     }
 
     const layer = document.createElement('div');
-    layer.className = 'll-ref-layer';
+    layer.className = 'fw-ref-layer';
 
     const img = document.createElement('img');
-    img.className = 'll-ref-img';
+    img.className = 'fw-ref-img';
     img.alt = '';
     img.draggable = false;
 
     const divider = document.createElement('div');
-    divider.className = 'll-ref-divider';
+    divider.className = 'fw-ref-divider';
 
     layer.append(img, divider);
     shadow.appendChild(layer);

@@ -1,9 +1,9 @@
 import type { CommandResponse, ContentEvent } from '@/messaging/protocol';
 import type { OverlayOptions, ReferenceOverlayState, ThemePreference } from '@/shared/types';
 
-export const BRIDGE_REQ = 'layoutlens-bridge-req';
-export const BRIDGE_RES = 'layoutlens-bridge-res';
-export const BRIDGE_EVT = 'layoutlens-bridge-evt';
+export const BRIDGE_REQ = 'framewise-bridge-req';
+export const BRIDGE_RES = 'framewise-bridge-res';
+export const BRIDGE_EVT = 'framewise-bridge-evt';
 
 export type DomDirection = 'parent' | 'child' | 'prev' | 'next';
 
@@ -87,7 +87,7 @@ class DrawerBridgeClient {
     if (!this.isEmbedded()) {
       return Promise.resolve({
         ok: false,
-        error: 'Open LayoutLens on any http or https webpage to inspect.',
+        error: 'Open Framewise on any http or https webpage to inspect.',
       });
     }
 

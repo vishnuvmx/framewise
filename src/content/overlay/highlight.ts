@@ -53,26 +53,26 @@ export function renderHighlightOverlay(
   if (!showDimensionsBadge) return;
 
   const badge = document.createElement('div');
-  badge.className = variant === 'selected' ? 'll-badge ll-badge--selected' : 'll-badge';
+  badge.className = variant === 'selected' ? 'fw-badge fw-badge--selected' : 'fw-badge';
 
   const tagSpan = document.createElement('span');
-  tagSpan.className = 'll-badge__tag';
+  tagSpan.className = 'fw-badge__tag';
   tagSpan.textContent = inspection.selector;
 
   const dimsSpan = document.createElement('span');
-  dimsSpan.className = 'll-badge__dims';
+  dimsSpan.className = 'fw-badge__dims';
   dimsSpan.textContent = `${roundNumber(width, 0)} × ${roundNumber(height, 0)}`;
 
   badge.append(tagSpan, dimsSpan);
 
   if (inspection.layout.isGrid) {
     const layoutTag = document.createElement('span');
-    layoutTag.className = 'll-badge__layout ll-badge__layout--grid';
+    layoutTag.className = 'fw-badge__layout fw-badge__layout--grid';
     layoutTag.textContent = 'grid';
     badge.append(layoutTag);
   } else if (inspection.layout.isFlex) {
     const layoutTag = document.createElement('span');
-    layoutTag.className = 'll-badge__layout ll-badge__layout--flex';
+    layoutTag.className = 'fw-badge__layout fw-badge__layout--flex';
     layoutTag.textContent = 'flex';
     badge.append(layoutTag);
   }
@@ -127,7 +127,7 @@ export function renderGroupHighlightOverlay(
     const pillX = Math.min(maxX, Math.max(12, r.left + 10));
     const pillY = Math.max(12, Math.min(window.innerHeight - 12, r.top + 10));
     const pill = document.createElement('span');
-    pill.className = variant === 'outlier' ? 'll-pill ll-pill--measure' : 'll-pill';
+    pill.className = variant === 'outlier' ? 'fw-pill fw-pill--measure' : 'fw-pill';
     if (variant === 'pattern') {
       pill.style.background = '#2563eb';
       pill.style.color = '#ffffff';

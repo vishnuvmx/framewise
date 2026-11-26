@@ -113,7 +113,7 @@ export function exportElementSwiftUI(el: ElementInspection): string {
 
 export function exportSwiftUITokens(summary: DesignSystemSummary): string {
   const lines: string[] = [
-    `// LayoutLens SwiftUI Design Tokens — ${summary.title || summary.url}`,
+    `// Framewise SwiftUI Design Tokens — ${summary.title || summary.url}`,
     'import SwiftUI',
     '',
     'enum DesignTokens {',

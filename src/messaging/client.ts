@@ -6,7 +6,7 @@ export async function sendRuntimeCommand<T = unknown>(
   try {
     const response = (await chrome.runtime.sendMessage(command)) as CommandResponse<T> | undefined;
     if (!response) {
-      return { ok: false, error: 'No response from LayoutLens background service.' };
+      return { ok: false, error: 'No response from Framewise background service.' };
     }
     return response;
   } catch (err) {

@@ -1,10 +1,10 @@
 <div align="center">
-  <img src="public/icons/icon.svg" alt="LayoutLens logo" width="64" height="64" />
-  <h1>LayoutLens</h1>
+  <img src="public/icons/icon.svg" alt="Framewise logo" width="64" height="64" />
+  <h1>Framewise</h1>
   <p><strong>Understand. Analyze. Verify.</strong></p>
   <p>
     A local-first visual development toolkit for Chromium browsers — inspect rendered layouts,
-    discover component patterns and visual drift, and verify Figma designs directly over live websites.
+    discover component patterns and visual drift, and verify design exports directly over live websites.
   </p>
 
   <p>
@@ -19,11 +19,9 @@
 
 ---
 
-![LayoutLens slide-in inspector showing distance ruler, Flexbox breakdown, and interactive Box Model](docs/screenshots/inspector-overview.png)
+## Why Framewise?
 
-## Why LayoutLens?
-
-Browser DevTools is built for deep runtime debugging, and Figma Dev Mode inspects static design files. **LayoutLens bridges the space in between** — it slides cleanly over the right edge of any webpage **without squishing the viewport**, letting you:
+Browser DevTools is built for deep runtime debugging, and Figma Dev Mode inspects static design files. **Framewise bridges the space in between** — it slides cleanly over the right edge of any webpage **without squishing the viewport**, letting you:
 
 - **Understand** how any rendered element is sized, spaced, and constrained (`Element` mode): box model schematics, Flexbox/Grid breakdowns, layout constraints (parent/container/containing-block explanations), WCAG contrast, and Figma-style distance rulers.
 - **Analyze** the live page as a design system (`Page` mode): Website Design Blueprint, repeated component discovery (buttons, icon buttons, inputs, cards, badges, nav links), automated visual drift / outlier detection, and multi-format token exports.
@@ -36,19 +34,22 @@ Everything runs **100% locally** inside your browser using native DOM APIs (`get
 ## Features
 
 ### 1. Non-Destructive Slide-In Drawer & Collapsible Peek Mode
+
 - Opens flush along the right edge (`420px` wide) in an isolated Shadow DOM host so responsive layouts never reflow.
 - Starts **Idle** so you can browse normally; click the crosshair button whenever you want to inspect.
 - Click the **`>` collapse button** to tuck the panel into a slim `<` pull-tab on the right edge so you can inspect elements positioned behind the panel.
 - Built-in **Dark / Light** theme toggle and a floating bottom-left HUD (`Box`, `Guides`, `Measure`, `Unlock`, `×`) while inspecting.
 
 ### 2. Visual Layout Overlays & Distance Ruler
+
 - **Box Model Overlay**: Color-coded margin, border, and padding bands with numeric pixel pills.
 - **Smart Flex & Grid Guides**: Highlights Flex gap strips, item bounds, and CSS Grid column/row tracks — and subtly reveals parent Flex/Grid tracks even when hovering child items.
 - **Element-to-Element Measurement**: Click any element to lock it, then hover any other element to measure horizontal/vertical gaps or parent-child inner offsets with dashed alignment guides.
 
-![LayoutLens Shadow DOM overlay showing padding bands, Flexbox gap strips, and dashed item boundaries](docs/screenshots/layout-overlays.png)
+![Framewise Shadow DOM overlay showing padding bands, Flexbox gap strips, and dashed item boundaries](docs/screenshots/layout-overlays.png)
 
 ### 3. Three-Mode Inspector (`Element` | `Page` | `Compare`)
+
 - **`Element` mode**: One unified, scannable spec sheet per element — selector & dimensions, live distance readout, plain-English Flexbox/Grid insights, **Layout constraints** (why an element is positioned or sized by its parent, max-width container, flex-grow/shrink rules, or containing block), click-to-copy Box Model schematic, Typography + Color swatches with WCAG contrast (`AAA` / `AA` / `AA Large` / `Fail`), 4-language code switcher, and collapsible DOM path & computed styles.
 - **`Page` mode**: Auto-scans rendered elements (including open Shadow DOM) to surface:
   - **Website Design Blueprint** (main container, primary grid, section cadence, font pairing, accent/surface/text tokens)
@@ -62,13 +63,13 @@ Everything runs **100% locally** inside your browser using native DOM APIs (`get
 
 ### 4. Multi-Language Code & Design System Export
 
-| Target | Single Element (`Element` mode) | Full Page Design System (`Page` mode) |
-| --- | --- | --- |
-| **CSS** | Clean rendered CSS rule | `:root` CSS custom properties (`.css`) |
-| **Tailwind** | Utility class markup (`flex`, `gap-*`, `p-*`, `rounded-*`, hex) | Tailwind v4 `@theme` stylesheet (`.css`) |
-| **SwiftUI (iOS)** | Starter `HStack` / `VStack` / `LazyVGrid` / `Text` modifier chain\* | `enum DesignTokens` + `Color(hex:)` extension (`.swift`) |
-| **Jetpack Compose (Android)** | Starter `Row` / `Column` / `LazyVerticalGrid` / `Text` + `Modifier`\* | `object DesignTokens` Kotlin file (`.kt`) |
-| **W3C JSON & Report** | — | W3C Design Tokens (`.json`) & Markdown audit report (`.md`) |
+| Target                        | Single Element (`Element` mode)                                       | Full Page Design System (`Page` mode)                       |
+| ----------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------- |
+| **CSS**                       | Clean rendered CSS rule                                               | `:root` CSS custom properties (`.css`)                      |
+| **Tailwind**                  | Utility class markup (`flex`, `gap-*`, `p-*`, `rounded-*`, hex)       | Tailwind v4 `@theme` stylesheet (`.css`)                    |
+| **SwiftUI (iOS)**             | Starter `HStack` / `VStack` / `LazyVGrid` / `Text` modifier chain\*   | `enum DesignTokens` + `Color(hex:)` extension (`.swift`)    |
+| **Jetpack Compose (Android)** | Starter `Row` / `Column` / `LazyVerticalGrid` / `Text` + `Modifier`\* | `object DesignTokens` Kotlin file (`.kt`)                   |
+| **W3C JSON & Report**         | —                                                                     | W3C Design Tokens (`.json`) & Markdown audit report (`.md`) |
 
 <sub>\* Element code snippets are generated deterministically from rendered CSS styles. When CSS-specific effects like `box-shadow`, `transform`, or `position: fixed/sticky` are present, SwiftUI and Jetpack Compose snippets include an explicit comment noting which properties require manual adaptation.</sub>
 
@@ -76,44 +77,47 @@ Everything runs **100% locally** inside your browser using native DOM APIs (`get
 
 ## Keyboard Shortcuts
 
-All shortcuts work whether keyboard focus is on the webpage or inside the LayoutLens drawer:
+All shortcuts work whether keyboard focus is on the webpage or inside the Framewise drawer:
 
-| Shortcut | Action |
-| --- | --- |
-| `Alt + Shift + L` | Open or close the LayoutLens drawer |
-| `Click` *(while Live)* | Lock selection on the hovered element (intercepts page clicks safely) |
-| `Esc` | Step 1: Unlock locked element → Step 2: Pause inspection → Step 3: Close drawer |
-| `↑` `↓` `←` `→` *(while Locked)* | Walk DOM: parent (`↑`), first child (`↓`), previous sibling (`←`), next sibling (`→`) |
-| `←` `→` *(on tab bar)* | Switch between `Element`, `Page`, and `Compare` modes |
+| Shortcut                         | Action                                                                                |
+| -------------------------------- | ------------------------------------------------------------------------------------- |
+| `Alt + Shift + L`                | Open or close the Framewise drawer                                                   |
+| `Click` _(while Live)_           | Lock selection on the hovered element (intercepts page clicks safely)                 |
+| `Esc`                            | Step 1: Unlock locked element → Step 2: Pause inspection → Step 3: Close drawer       |
+| `↑` `↓` `←` `→` _(while Locked)_ | Walk DOM: parent (`↑`), first child (`↓`), previous sibling (`←`), next sibling (`→`) |
+| `←` `→` _(on tab bar)_           | Switch between `Element`, `Page`, and `Compare` modes                                 |
 
 ---
 
 ## Installation
 
 ### Prerequisites
+
 - [Bun](https://bun.sh/) `>= 1.1` (or Node.js `>= 20`)
 - Any Chromium browser (Chrome, Brave, Arc, Edge, Vivaldi)
 
 ### Build from Source
 
 ```bash
-git clone https://github.com/<your-username>/layoutlens.git
-cd layoutlens
+git clone https://github.com/<your-username>/framewise.git
+cd framewise
 bun install
 bun run build
 ```
 
 ### Load Unpacked in Chrome / Brave / Edge
+
 1. Open `chrome://extensions` (or `brave://extensions` / `edge://extensions`).
 2. Enable **Developer mode** in the top-right corner.
 3. Click **Load unpacked** and select the generated `dist/` folder.
-4. Visit any `http://` or `https://` website and click the **LayoutLens** toolbar icon (or press `Alt+Shift+L`).
+4. Visit any `http://` or `https://` website and click the **Framewise** toolbar icon (or press `Alt+Shift+L`).
 
 ---
 
 ## Privacy & Local-First
 
-LayoutLens is designed to run completely offline inside your browser:
+Framewise is designed to run completely offline inside your browser:
+
 - **Zero network requests**: No analytics, no telemetry, no remote fonts, and no external API calls. Fonts (`DM Sans Variable`) and icons are bundled directly in the extension.
 - **Local-only storage**: Only your Dark/Light theme preference is persisted via `chrome.storage.local`.
 - **In-memory design references**: Images pasted or uploaded into `Compare` mode stay strictly in local browser memory for the active tab and are discarded when cleared or when the page reloads.
@@ -122,10 +126,10 @@ LayoutLens is designed to run completely offline inside your browser:
 
 ## Architecture
 
-LayoutLens keeps the inspection, analysis, and export engines **completely framework-independent** (no React or `chrome.*` imports in `src/core/` or `src/exporters/`):
+Framewise keeps the inspection, analysis, and export engines **completely framework-independent** (no React or `chrome.*` imports in `src/core/` or `src/exporters/`):
 
 ```text
-layoutlens/
+framewise/
 ├── public/icons/             # Extension PNG icons (16, 48, 128) & vector SVG mark
 ├── docs/screenshots/         # README screenshots
 ├── manifest.config.ts        # Chrome Manifest V3 configuration (CRXJS)
@@ -161,6 +165,7 @@ layoutlens/
 ```
 
 ### Tech Stack
+
 - **Language**: TypeScript (strict mode)
 - **UI**: React 19, Tailwind CSS v4, Lucide Icons, bundled DM Sans Variable font
 - **Build & MV3**: Vite 6, `@crxjs/vite-plugin`, Bun
@@ -188,6 +193,12 @@ Contributions, bug reports, and feature ideas are welcome! See [CONTRIBUTING.md]
 ## Changelog
 
 See [CHANGELOG.md](./CHANGELOG.md) for release notes and version history.
+
+---
+
+## Disclaimer
+
+Framewise is an independent open-source project and is not affiliated with, endorsed by, or sponsored by Figma, Google, Apple, or Tailwind Labs.
 
 ---
 

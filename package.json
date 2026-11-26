@@ -1,5 +1,5 @@
 {
-  "name": "layoutlens",
+  "name": "framewise",
   "version": "0.4.0",
   "private": false,
   "description": "Understand. Analyze. Verify. A local-first visual development toolkit for inspecting rendered interfaces, discovering component patterns, and verifying design implementations.",

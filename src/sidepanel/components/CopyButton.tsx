@@ -51,12 +51,12 @@ export function CopyButton({ text, label, className = '' }: CopyButtonProps) {
       type="button"
       onClick={handleCopy}
       title={copied ? 'Copied' : `Copy ${label ?? text}`}
-      className={`ll-btn ll-btn-secondary ll-btn-sm ${className}`}
+      className={`fw-btn fw-btn-secondary fw-btn-sm ${className}`}
     >
       {copied ? (
-        <Check className="h-3.5 w-3.5 text-[var(--ll-positive)]" strokeWidth={1.5} />
+        <Check className="h-3.5 w-3.5 text-[var(--fw-positive)]" strokeWidth={1.5} />
       ) : (
-        <Copy className="h-3.5 w-3.5 text-[var(--ll-text-muted)]" strokeWidth={1.5} />
+        <Copy className="h-3.5 w-3.5 text-[var(--fw-text-muted)]" strokeWidth={1.5} />
       )}
       {label && <span>{copied ? 'Copied' : label}</span>}
     </button>

@@ -90,24 +90,24 @@ export function PageView({
 
   const handleDownload = () => {
     const meta = PAGE_EXPORT_FORMATS.find((f) => f.id === format) ?? PAGE_EXPORT_FORMATS[0];
-    downloadTextFile(`layoutlens-${meta.ext}`, exportedOutput, meta.mime);
+    downloadTextFile(`framewise-${meta.ext}`, exportedOutput, meta.mime);
   };
 
   return (
     <div>
       {/* 1. Viewport + Scan Summary */}
-      <section className="ll-section bg-[var(--ll-surface)] flex items-center justify-between gap-3">
+      <section className="fw-section bg-[var(--fw-surface)] flex items-center justify-between gap-3">
         <div className="space-y-0.5 min-w-0">
           {vp && (
-            <div className="ll-mono text-[14px] font-medium">
+            <div className="fw-mono text-[14px] font-medium">
               {vp.width} × {vp.height}px
-              <span className="mx-1.5 text-[var(--ll-text-muted)]">·</span>
-              <span className="text-[var(--ll-accent)]">{vp.breakpoint}</span>
-              <span className="mx-1.5 text-[var(--ll-text-muted)]">·</span>
+              <span className="mx-1.5 text-[var(--fw-text-muted)]">·</span>
+              <span className="text-[var(--fw-accent)]">{vp.breakpoint}</span>
+              <span className="mx-1.5 text-[var(--fw-text-muted)]">·</span>
               {vp.devicePixelRatio}x
             </div>
           )}
-          <div className="ll-mono text-[12px] text-[var(--ll-text-muted)]">
+          <div className="fw-mono text-[12px] text-[var(--fw-text-muted)]">
             {designSystem.scannedElements} elements · {designSystem.components.length} patterns ·{' '}
             {designSystem.colors.length} colors
           </div>
@@ -120,10 +120,10 @@ export function PageView({
             onScan();
           }}
           disabled={scanning}
-          className="ll-btn ll-btn-secondary ll-btn-sm shrink-0"
+          className="fw-btn fw-btn-secondary fw-btn-sm shrink-0"
         >
           <RefreshCw
-            className={`h-3.5 w-3.5 text-[var(--ll-text-muted)] ${scanning ? 'animate-spin' : ''}`}
+            className={`h-3.5 w-3.5 text-[var(--fw-text-muted)] ${scanning ? 'animate-spin' : ''}`}
             strokeWidth={1.5}
           />
           <span>Rescan</span>
@@ -131,26 +131,26 @@ export function PageView({
       </section>
 
       {/* 2. Website Design Blueprint */}
-      <section className="ll-section space-y-3">
+      <section className="fw-section space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <span className="ll-section-title">Design blueprint</span>
+          <span className="fw-section-title">Design blueprint</span>
           <CopyButton
             text={formatPageExport(designSystem, 'report', selected)}
             label="Copy blueprint"
           />
         </div>
 
-        <div className="divide-y divide-[var(--ll-hairline)] border-t border-b border-[var(--ll-hairline)]">
+        <div className="divide-y divide-[var(--fw-hairline)] border-t border-b border-[var(--fw-hairline)]">
           {bp.layout.mainContainer && (
             <button
               type="button"
               onClick={() => onSelectSelector(bp.layout.mainContainer!.selector)}
               onMouseEnter={() => onHighlightSelector(bp.layout.mainContainer!.selector)}
               onMouseLeave={() => onHighlightSelector(null)}
-              className="w-full min-h-9 flex items-center justify-between gap-3 px-2 py-2 text-left hover:bg-[var(--ll-raised)] transition-colors cursor-pointer"
+              className="w-full min-h-9 flex items-center justify-between gap-3 px-2 py-2 text-left hover:bg-[var(--fw-raised)] transition-colors cursor-pointer"
             >
-              <span className="text-[13px] text-[var(--ll-text-secondary)]">Main container</span>
-              <span className="ll-mono text-[13px] text-[var(--ll-text)]">
+              <span className="text-[13px] text-[var(--fw-text-secondary)]">Main container</span>
+              <span className="fw-mono text-[13px] text-[var(--fw-text)]">
                 {formatPx(bp.layout.mainContainer.width)}
                 {bp.layout.mainContainer.centered ? ' · centered' : ''}
               </span>
@@ -162,36 +162,36 @@ export function PageView({
               onClick={() => onSelectSelector(bp.layout.primaryGrid!.selector)}
               onMouseEnter={() => onHighlightSelector(bp.layout.primaryGrid!.selector)}
               onMouseLeave={() => onHighlightSelector(null)}
-              className="w-full min-h-9 flex items-center justify-between gap-3 px-2 py-2 text-left hover:bg-[var(--ll-raised)] transition-colors cursor-pointer"
+              className="w-full min-h-9 flex items-center justify-between gap-3 px-2 py-2 text-left hover:bg-[var(--fw-raised)] transition-colors cursor-pointer"
             >
-              <span className="text-[13px] text-[var(--ll-text-secondary)]">Primary grid</span>
-              <span className="ll-mono text-[13px] text-[var(--ll-text)]">
+              <span className="text-[13px] text-[var(--fw-text-secondary)]">Primary grid</span>
+              <span className="fw-mono text-[13px] text-[var(--fw-text)]">
                 {bp.layout.primaryGrid.columns} cols · gap {bp.layout.primaryGrid.gap}
               </span>
             </button>
           )}
           {bp.layout.sectionSpacingPx && (
             <div className="min-h-9 flex items-center justify-between gap-3 px-2 py-2">
-              <span className="text-[13px] text-[var(--ll-text-secondary)]">Section rhythm</span>
-              <span className="ll-mono text-[13px]">{bp.layout.sectionSpacingPx}px</span>
+              <span className="text-[13px] text-[var(--fw-text-secondary)]">Section rhythm</span>
+              <span className="fw-mono text-[13px]">{bp.layout.sectionSpacingPx}px</span>
             </div>
           )}
           {(bp.typography.headingFont || bp.typography.bodyFont) && (
             <div className="min-h-9 flex items-center justify-between gap-3 px-2 py-2">
-              <span className="text-[13px] text-[var(--ll-text-secondary)]">Type pairing</span>
-              <span className="ll-mono text-[12px] text-right truncate">
+              <span className="text-[13px] text-[var(--fw-text-secondary)]">Type pairing</span>
+              <span className="fw-mono text-[12px] text-right truncate">
                 {bp.typography.headingFont ?? '—'} / {bp.typography.bodyFont ?? '—'}
               </span>
             </div>
           )}
           {(bp.colors.accent || bp.colors.surface) && (
             <div className="min-h-9 flex items-center justify-between gap-3 px-2 py-2">
-              <span className="text-[13px] text-[var(--ll-text-secondary)] shrink-0">Key colors</span>
-              <div className="flex flex-wrap items-center justify-end gap-2 ll-mono text-[12px] min-w-0">
+              <span className="text-[13px] text-[var(--fw-text-secondary)] shrink-0">Key colors</span>
+              <div className="flex flex-wrap items-center justify-end gap-2 fw-mono text-[12px] min-w-0">
                 {bp.colors.accent && (
                   <span className="inline-flex items-center gap-1">
                     <span
-                      className="h-3 w-3 rounded-[3px] border border-[var(--ll-hairline-strong)]"
+                      className="h-3 w-3 rounded-[3px] border border-[var(--fw-hairline-strong)]"
                       style={{ backgroundColor: bp.colors.accent.hex }}
                     />
                     {bp.colors.accent.hex}
@@ -200,7 +200,7 @@ export function PageView({
                 {bp.colors.text && (
                   <span className="inline-flex items-center gap-1">
                     <span
-                      className="h-3 w-3 rounded-[3px] border border-[var(--ll-hairline-strong)]"
+                      className="h-3 w-3 rounded-[3px] border border-[var(--fw-hairline-strong)]"
                       style={{ backgroundColor: bp.colors.text.hex }}
                     />
                     {bp.colors.text.hex}
@@ -213,9 +213,9 @@ export function PageView({
       </section>
 
       {/* 3. Discovered Component Patterns (click/hover highlights ALL instances on page) */}
-      <section className="ll-section space-y-3">
+      <section className="fw-section space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <span className="ll-section-title">Discovered components</span>
+          <span className="fw-section-title">Discovered components</span>
           {pinnedGroupId ? (
             <button
               type="button"
@@ -223,17 +223,17 @@ export function PageView({
                 setPinnedGroupId(null);
                 onHighlightGroup([]);
               }}
-              className="ll-btn ll-btn-secondary ll-btn-sm"
+              className="fw-btn fw-btn-secondary fw-btn-sm"
             >
               Clear highlights
             </button>
           ) : (
-            <span className="text-[12px] text-[var(--ll-text-muted)]">Click to highlight all</span>
+            <span className="text-[12px] text-[var(--fw-text-muted)]">Click to highlight all</span>
           )}
         </div>
 
         {designSystem.components.length === 0 ? (
-          <p className="text-[13px] text-[var(--ll-text-muted)]">
+          <p className="text-[13px] text-[var(--fw-text-muted)]">
             No repeated component patterns detected on this page
           </p>
         ) : (
@@ -253,13 +253,13 @@ export function PageView({
                   }}
                   className={`w-full px-3 py-2.5 rounded-[8px] border text-left flex items-center justify-between gap-3 transition-colors cursor-pointer ${
                     isPinned
-                      ? 'border-[var(--ll-accent)] bg-[var(--ll-accent-soft)]'
-                      : 'border-[var(--ll-hairline)] bg-[var(--ll-raised)] hover:bg-[var(--ll-hover)]'
+                      ? 'border-[var(--fw-accent)] bg-[var(--fw-accent-soft)]'
+                      : 'border-[var(--fw-hairline)] bg-[var(--fw-raised)] hover:bg-[var(--fw-hover)]'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
                     <span
-                      className="h-6 w-6 rounded-[5px] border border-[var(--ll-hairline-strong)] shrink-0"
+                      className="h-6 w-6 rounded-[5px] border border-[var(--fw-hairline-strong)] shrink-0"
                       style={{
                         backgroundColor:
                           comp.backgroundHex === 'TRANSPARENT' ? 'transparent' : comp.backgroundHex,
@@ -267,19 +267,19 @@ export function PageView({
                     />
                     <div className="min-w-0">
                       <div className="text-[13px] font-medium truncate">{comp.name}</div>
-                      <div className="ll-mono text-[11px] text-[var(--ll-text-muted)]">
+                      <div className="fw-mono text-[11px] text-[var(--fw-text-muted)]">
                         {comp.sampleSize.width}×{comp.sampleSize.height} · r {comp.borderRadius} ·{' '}
                         {comp.fontSize}
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="ll-mono text-[12px] font-medium text-[var(--ll-accent)]">
+                    <span className="fw-mono text-[12px] font-medium text-[var(--fw-accent)]">
                       {comp.count}×
                     </span>
                     <Eye
                       className={`h-3.5 w-3.5 ${
-                        isPinned ? 'text-[var(--ll-accent)]' : 'text-[var(--ll-text-muted)]'
+                        isPinned ? 'text-[var(--fw-accent)]' : 'text-[var(--fw-text-muted)]'
                       }`}
                       strokeWidth={1.5}
                     />
@@ -293,8 +293,8 @@ export function PageView({
 
       {/* 4. Component Consistency & Outlier Detection */}
       {designSystem.consistencyReports.length > 0 && (
-        <section className="ll-section space-y-3">
-          <span className="ll-section-title">Consistency & outliers</span>
+        <section className="fw-section space-y-3">
+          <span className="fw-section-title">Consistency & outliers</span>
           <div className="space-y-3">
             {designSystem.consistencyReports.map((report) => {
               const groupKey = `outlier:${report.category}`;
@@ -302,17 +302,17 @@ export function PageView({
               return (
                 <div
                   key={report.category}
-                  className="ll-raised p-3 space-y-2.5 border border-[var(--ll-hairline)] overflow-hidden min-w-0"
+                  className="fw-raised p-3 space-y-2.5 border border-[var(--fw-hairline)] overflow-hidden min-w-0"
                 >
                   <div className="flex items-center justify-between gap-2 min-w-0">
                     <div className="min-w-0">
                       <div className="text-[13px] font-medium truncate">
                         {report.categoryLabel}{' '}
-                        <span className="ll-mono text-[12px] text-[var(--ll-text-muted)]">
+                        <span className="fw-mono text-[12px] text-[var(--fw-text-muted)]">
                           ({report.totalInstances})
                         </span>
                       </div>
-                      <div className="ll-mono text-[11px] text-[var(--ll-text-muted)] truncate">
+                      <div className="fw-mono text-[11px] text-[var(--fw-text-muted)] truncate">
                         Baseline: {report.baseline.heightPx}px · r {report.baseline.borderRadius} ·{' '}
                         {report.baseline.fontSize}
                       </div>
@@ -326,15 +326,15 @@ export function PageView({
                           'outlier'
                         )
                       }
-                      className={`ll-btn ll-btn-sm shrink-0 ${
-                        isPinned ? 'll-btn-danger' : 'll-btn-secondary'
+                      className={`fw-btn fw-btn-sm shrink-0 ${
+                        isPinned ? 'fw-btn-danger' : 'fw-btn-secondary'
                       }`}
                     >
                       {isPinned ? 'Hide' : `${report.outliers.length} outliers`}
                     </button>
                   </div>
 
-                  <div className="divide-y divide-[var(--ll-hairline)] border-t border-[var(--ll-hairline)]">
+                  <div className="divide-y divide-[var(--fw-hairline)] border-t border-[var(--fw-hairline)]">
                     {report.outliers.map((outlier, idx) => (
                       <button
                         key={`${outlier.selector}-${idx}`}
@@ -342,12 +342,12 @@ export function PageView({
                         onClick={() => onSelectSelector(outlier.selector)}
                         onMouseEnter={() => onHighlightSelector(outlier.selector)}
                         onMouseLeave={() => onHighlightSelector(null)}
-                        className="w-full py-2.5 flex flex-col items-start gap-1 text-left hover:text-[var(--ll-accent)] transition-colors cursor-pointer min-w-0"
+                        className="w-full py-2.5 flex flex-col items-start gap-1 text-left hover:text-[var(--fw-accent)] transition-colors cursor-pointer min-w-0"
                       >
-                        <span className="text-[13px] font-medium text-[var(--ll-text)] truncate w-full">
+                        <span className="text-[13px] font-medium text-[var(--fw-text)] truncate w-full">
                           {outlier.label}
                         </span>
-                        <div className="flex flex-wrap gap-x-2 gap-y-0.5 ll-mono text-[11px] text-[var(--ll-negative)] break-words w-full">
+                        <div className="flex flex-wrap gap-x-2 gap-y-0.5 fw-mono text-[11px] text-[var(--fw-negative)] break-words w-full">
                           {outlier.reasons.map((reason, rIdx) => (
                             <span key={rIdx}>
                               {rIdx > 0 ? '· ' : ''}
@@ -366,23 +366,23 @@ export function PageView({
       )}
 
       {/* 5. Export Design System (Web CSS / Tailwind v4 / iOS SwiftUI / Android Compose / JSON / Report) */}
-      <section className="ll-section space-y-3">
+      <section className="fw-section space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <span className="ll-section-title">Export design system</span>
+          <span className="fw-section-title">Export design system</span>
           <div className="flex items-center gap-1.5">
             <CopyButton text={exportedOutput} label="Copy" />
             <button
               type="button"
               onClick={handleDownload}
-              className="ll-btn ll-btn-secondary ll-btn-sm"
+              className="fw-btn fw-btn-secondary fw-btn-sm"
             >
-              <Download className="h-3.5 w-3.5 text-[var(--ll-text-muted)]" strokeWidth={1.5} />
+              <Download className="h-3.5 w-3.5 text-[var(--fw-text-muted)]" strokeWidth={1.5} />
               <span>Save</span>
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-1 p-1 rounded-[8px] bg-[var(--ll-raised)] border border-[var(--ll-hairline)]">
+        <div className="grid grid-cols-3 gap-1 p-1 rounded-[8px] bg-[var(--fw-raised)] border border-[var(--fw-hairline)]">
           {PAGE_EXPORT_FORMATS.map((item) => (
             <button
               key={item.id}
@@ -390,8 +390,8 @@ export function PageView({
               onClick={() => setFormat(item.id)}
               className={`h-8 rounded-[6px] text-[13px] transition-colors cursor-pointer ${
                 format === item.id
-                  ? 'bg-[var(--ll-surface)] text-[var(--ll-text)] font-medium border border-[var(--ll-hairline)]'
-                  : 'text-[var(--ll-text-muted)] hover:text-[var(--ll-text)]'
+                  ? 'bg-[var(--fw-surface)] text-[var(--fw-text)] font-medium border border-[var(--fw-hairline)]'
+                  : 'text-[var(--fw-text-muted)] hover:text-[var(--fw-text)]'
               }`}
             >
               {item.label}
@@ -399,14 +399,14 @@ export function PageView({
           ))}
         </div>
 
-        <pre className="ll-code-block max-h-56 overflow-y-auto">{exportedOutput}</pre>
+        <pre className="fw-code-block max-h-56 overflow-y-auto">{exportedOutput}</pre>
       </section>
 
       {/* 6. Color Palette */}
-      <section className="ll-section space-y-3">
+      <section className="fw-section space-y-3">
         <div className="flex items-center justify-between">
-          <span className="ll-section-title">Colors</span>
-          <span className="ll-mono text-[12px] text-[var(--ll-text-muted)]">
+          <span className="fw-section-title">Colors</span>
+          <span className="fw-mono text-[12px] text-[var(--fw-text-muted)]">
             {designSystem.colors.length}
           </span>
         </div>
@@ -417,21 +417,21 @@ export function PageView({
               type="button"
               onClick={() => void handleCopyHex(token.hex)}
               title={`Copy ${token.hex}`}
-              className="ll-raised p-2 flex items-center gap-2.5 text-left hover:bg-[var(--ll-hover)] transition-colors cursor-pointer"
+              className="fw-raised p-2 flex items-center gap-2.5 text-left hover:bg-[var(--fw-hover)] transition-colors cursor-pointer"
             >
               <span
-                className="h-7 w-7 rounded-[5px] border border-[var(--ll-hairline-strong)] shrink-0"
+                className="h-7 w-7 rounded-[5px] border border-[var(--fw-hairline-strong)] shrink-0"
                 style={{ backgroundColor: token.rgba }}
               />
               <div className="min-w-0">
-                <div className="ll-mono text-[12px] font-medium truncate">
+                <div className="fw-mono text-[12px] font-medium truncate">
                   {copiedHex === token.hex ? (
-                    <span className="text-[var(--ll-positive)]">Copied</span>
+                    <span className="text-[var(--fw-positive)]">Copied</span>
                   ) : (
                     token.hex
                   )}
                 </div>
-                <div className="text-[11px] text-[var(--ll-text-muted)] truncate">
+                <div className="text-[11px] text-[var(--fw-text-muted)] truncate">
                   {token.suggestedName} · {token.count}×
                 </div>
               </div>
@@ -441,10 +441,10 @@ export function PageView({
       </section>
 
       {/* 7. Typography Scale */}
-      <section className="ll-section space-y-3">
+      <section className="fw-section space-y-3">
         <div className="flex items-center justify-between">
-          <span className="ll-section-title">Typography</span>
-          <span className="ll-mono text-[12px] text-[var(--ll-text-muted)] truncate max-w-[200px]">
+          <span className="fw-section-title">Typography</span>
+          <span className="fw-mono text-[12px] text-[var(--fw-text-muted)] truncate max-w-[200px]">
             {designSystem.fontFamilies.map((f) => f.name).slice(0, 2).join(', ')}
           </span>
         </div>
@@ -452,16 +452,16 @@ export function PageView({
           {designSystem.typography.slice(0, 10).map((token) => (
             <div
               key={token.id}
-              className="ll-raised px-3 py-2 flex items-center justify-between gap-3"
+              className="fw-raised px-3 py-2 flex items-center justify-between gap-3"
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="ll-mono text-[12px] font-medium">{token.suggestedRole}</span>
-                  <span className="text-[12px] text-[var(--ll-text-secondary)] truncate">
+                  <span className="fw-mono text-[12px] font-medium">{token.suggestedRole}</span>
+                  <span className="text-[12px] text-[var(--fw-text-secondary)] truncate">
                     {token.primaryFont}
                   </span>
                 </div>
-                <div className="ll-mono text-[11px] text-[var(--ll-text-muted)]">
+                <div className="fw-mono text-[11px] text-[var(--fw-text-muted)]">
                   {token.fontSize} / {token.lineHeight} · w{token.fontWeight} · {token.count}×
                 </div>
               </div>
@@ -475,31 +475,31 @@ export function PageView({
 
       {/* 8. Spacing & Border Radii */}
       {(designSystem.spacing.length > 0 || designSystem.radii.length > 0) && (
-        <section className="ll-section space-y-4">
+        <section className="fw-section space-y-4">
           {designSystem.spacing.length > 0 && (
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="ll-section-title">Spacing scale</span>
-                <span className="ll-mono text-[11px] text-[var(--ll-text-muted)]">count</span>
+                <span className="fw-section-title">Spacing scale</span>
+                <span className="fw-mono text-[11px] text-[var(--fw-text-muted)]">count</span>
               </div>
               <div className="space-y-2 max-h-44 overflow-y-auto">
                 {designSystem.spacing.slice(0, 10).map((token) => {
                   const isDominant = token.count === dominantSpaceCount;
                   return (
                     <div key={token.value} className="flex items-center gap-3 text-[12px]">
-                      <span className="ll-mono w-12 shrink-0">{token.value}</span>
-                      <div className="flex-1 h-1.5 rounded-[2px] bg-[var(--ll-raised)] overflow-hidden">
+                      <span className="fw-mono w-12 shrink-0">{token.value}</span>
+                      <div className="flex-1 h-1.5 rounded-[2px] bg-[var(--fw-raised)] overflow-hidden">
                         <div
                           className="h-full rounded-[2px]"
                           style={{
                             width: `${Math.max(6, Math.min(100, (token.valuePx / maxSpace) * 100))}%`,
                             backgroundColor: isDominant
-                              ? 'var(--ll-accent-fill)'
-                              : 'var(--ll-text-muted)',
+                              ? 'var(--fw-accent-fill)'
+                              : 'var(--fw-text-muted)',
                           }}
                         />
                       </div>
-                      <span className="ll-mono text-[11px] text-[var(--ll-text-muted)] w-10 text-right shrink-0">
+                      <span className="fw-mono text-[11px] text-[var(--fw-text-muted)] w-10 text-right shrink-0">
                         {token.count}×
                       </span>
                     </div>
@@ -511,19 +511,19 @@ export function PageView({
 
           {designSystem.radii.length > 0 && (
             <div className="space-y-2">
-              <span className="ll-section-title">Border radii</span>
+              <span className="fw-section-title">Border radii</span>
               <div className="flex flex-wrap gap-2">
                 {designSystem.radii.map((token) => (
                   <div
                     key={token.value}
-                    className="ll-raised px-2.5 py-1.5 inline-flex items-center gap-2 text-[12px]"
+                    className="fw-raised px-2.5 py-1.5 inline-flex items-center gap-2 text-[12px]"
                   >
                     <span
-                      className="h-4 w-4 border border-[var(--ll-text-secondary)] bg-[var(--ll-surface)] shrink-0"
+                      className="h-4 w-4 border border-[var(--fw-text-secondary)] bg-[var(--fw-surface)] shrink-0"
                       style={{ borderRadius: `${Math.min(token.valuePx, 8)}px` }}
                     />
-                    <span className="ll-mono font-medium">{token.value}</span>
-                    <span className="ll-mono text-[11px] text-[var(--ll-text-muted)]">
+                    <span className="fw-mono font-medium">{token.value}</span>
+                    <span className="fw-mono text-[11px] text-[var(--fw-text-muted)]">
                       {token.count}×
                     </span>
                   </div>
@@ -541,19 +541,19 @@ export function PageView({
             type="button"
             onClick={() => setLayoutTreeOpen((v) => !v)}
             aria-expanded={layoutTreeOpen}
-            className="w-full px-5 h-12 flex items-center justify-between text-left hover:bg-[var(--ll-surface)] transition-colors cursor-pointer"
+            className="w-full px-5 h-12 flex items-center justify-between text-left hover:bg-[var(--fw-surface)] transition-colors cursor-pointer"
           >
-            <span className="ll-section-title">
+            <span className="fw-section-title">
               Containers & grids{' '}
-              <span className="ll-mono text-[12px] text-[var(--ll-text-muted)] ml-1">
+              <span className="fw-mono text-[12px] text-[var(--fw-text-muted)] ml-1">
                 {designSystem.containers.length} containers · {designSystem.layoutTree.length}{' '}
                 layouts
               </span>
             </span>
             {layoutTreeOpen ? (
-              <ChevronDown className="h-4 w-4 text-[var(--ll-text-muted)]" strokeWidth={1.5} />
+              <ChevronDown className="h-4 w-4 text-[var(--fw-text-muted)]" strokeWidth={1.5} />
             ) : (
-              <ChevronRight className="h-4 w-4 text-[var(--ll-text-muted)]" strokeWidth={1.5} />
+              <ChevronRight className="h-4 w-4 text-[var(--fw-text-muted)]" strokeWidth={1.5} />
             )}
           </button>
 
@@ -568,10 +568,10 @@ export function PageView({
                       onClick={() => onSelectSelector(c.selector)}
                       onMouseEnter={() => onHighlightSelector(c.selector)}
                       onMouseLeave={() => onHighlightSelector(null)}
-                      className="ll-row w-full text-left cursor-pointer"
+                      className="fw-row w-full text-left cursor-pointer"
                     >
-                      <span className="ll-mono text-[12px] truncate">{c.selector}</span>
-                      <span className="ll-mono text-[12px] text-[var(--ll-text-secondary)] shrink-0">
+                      <span className="fw-mono text-[12px] truncate">{c.selector}</span>
+                      <span className="fw-mono text-[12px] text-[var(--fw-text-secondary)] shrink-0">
                         {formatPx(c.width)}
                         {c.centered ? ' · centered' : ''}
                       </span>
@@ -590,15 +590,15 @@ export function PageView({
                       onMouseEnter={() => onHighlightSelector(node.selector)}
                       onMouseLeave={() => onHighlightSelector(null)}
                       style={{ paddingLeft: `${8 + Math.min(node.depth, 5) * 12}px` }}
-                      className="ll-row w-full text-left cursor-pointer"
+                      className="fw-row w-full text-left cursor-pointer"
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="ll-mono text-[11px] text-[var(--ll-accent)] w-8 shrink-0">
+                        <span className="fw-mono text-[11px] text-[var(--fw-accent)] w-8 shrink-0">
                           {node.type}
                         </span>
-                        <span className="ll-mono text-[12px] truncate">{node.selector}</span>
+                        <span className="fw-mono text-[12px] truncate">{node.selector}</span>
                       </div>
-                      <span className="ll-mono text-[11px] text-[var(--ll-text-muted)] shrink-0">
+                      <span className="fw-mono text-[11px] text-[var(--fw-text-muted)] shrink-0">
                         {node.directionOrCols} · {node.gap}
                       </span>
                     </button>

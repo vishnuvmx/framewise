@@ -31,7 +31,7 @@ export function exportInspectionReport(
   selected: ElementInspection | null
 ): string {
   const lines: string[] = [
-    `# LayoutLens Inspection Report`,
+    `# Framewise Inspection Report`,
     '',
     `- **Page:** ${summary.title || 'Untitled'} (${summary.url})`,
     `- **Viewport:** ${summary.viewport.width} × ${summary.viewport.height}px (${summary.viewport.breakpoint.toUpperCase()}, DPR ${summary.viewport.devicePixelRatio}x)`,

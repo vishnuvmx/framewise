@@ -180,7 +180,7 @@ export function exportElementTailwind(el: ElementInspection): string {
 
 export function exportTailwindTheme(summary: DesignSystemSummary): string {
   const lines: string[] = [
-    `/* LayoutLens Tailwind v4 Theme — ${summary.title || summary.url} */`,
+    `/* Framewise Tailwind v4 Theme — ${summary.title || summary.url} */`,
     '@theme {',
   ];
 

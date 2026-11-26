@@ -52,7 +52,7 @@ export function isInspectableElement(node: Node | null | undefined): node is Ele
 
 /**
  * Resolves the deepest inspectable element at viewport coordinates (x, y),
- * piercing open Shadow DOM roots while ignoring LayoutLens's own overlay & drawer hosts.
+ * piercing open Shadow DOM roots while ignoring Framewise's own overlay & drawer hosts.
  */
 export function getElementAtPoint(x: number, y: number, doc: Document = document): Element | null {
   const stack = doc.elementsFromPoint(x, y);

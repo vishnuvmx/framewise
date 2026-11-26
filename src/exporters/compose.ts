@@ -128,8 +128,8 @@ export function exportElementCompose(el: ElementInspection): string {
 
 export function exportComposeTokens(summary: DesignSystemSummary): string {
   const lines: string[] = [
-    `// LayoutLens Jetpack Compose Design Tokens — ${summary.title || summary.url}`,
-    'package com.layoutlens.tokens',
+    `// Framewise Jetpack Compose Design Tokens — ${summary.title || summary.url}`,
+    'package com.framewise.tokens',
     '',
     'import androidx.compose.ui.graphics.Color',
     'import androidx.compose.ui.text.TextStyle',

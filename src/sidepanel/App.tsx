@@ -321,22 +321,22 @@ export function App() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-[var(--ll-bg)] text-[var(--ll-text)]">
+    <div className="h-full flex flex-col bg-[var(--fw-bg)] text-[var(--fw-text)]">
       {/* Compact Header */}
-      <header className="bg-[var(--ll-chrome)] border-b border-[var(--ll-hairline)] shrink-0">
+      <header className="bg-[var(--fw-chrome)] border-b border-[var(--fw-hairline)] shrink-0">
         <div className="h-14 px-5 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5 min-w-0">
             <img src="/icons/icon.svg" alt="" width={24} height={24} className="h-6 w-6 shrink-0" />
-            <span className="text-[17px] font-medium leading-none">LayoutLens</span>
-            <span className="inline-flex items-center gap-1.5 pl-1 text-[13px] text-[var(--ll-text-muted)]">
+            <span className="text-[17px] font-medium leading-none">Framewise</span>
+            <span className="inline-flex items-center gap-1.5 pl-1 text-[13px] text-[var(--fw-text-muted)]">
               <span
                 className="h-2 w-2 rounded-full shrink-0"
                 style={{
                   backgroundColor: active
                     ? locked
-                      ? 'var(--ll-accent-fill)'
-                      : 'var(--ll-positive)'
-                    : 'var(--ll-text-muted)',
+                      ? 'var(--fw-accent-fill)'
+                      : 'var(--fw-positive)'
+                    : 'var(--fw-text-muted)',
                 }}
               />
               <span>{active ? (locked ? 'Locked' : 'Live') : 'Idle'}</span>
@@ -350,9 +350,9 @@ export function App() {
               title={active ? 'Pause inspection' : 'Start inspecting'}
               aria-label={active ? 'Pause inspection' : 'Start inspecting'}
               aria-pressed={active}
-              className={`ll-icon-btn ${
+              className={`fw-icon-btn ${
                 active
-                  ? '!border-[var(--ll-accent)] !bg-[var(--ll-accent-soft)] !text-[var(--ll-accent)]'
+                  ? '!border-[var(--fw-accent)] !bg-[var(--fw-accent-soft)] !text-[var(--fw-accent)]'
                   : ''
               }`}
             >
@@ -368,7 +368,7 @@ export function App() {
               onClick={handleToggleTheme}
               title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
               aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-              className="ll-icon-btn"
+              className="fw-icon-btn"
             >
               {theme === 'dark' ? (
                 <Sun className="h-4 w-4" strokeWidth={1.5} />
@@ -382,7 +382,7 @@ export function App() {
               onClick={() => void handleCollapseDrawer()}
               title="Collapse sidebar to inspect behind it"
               aria-label="Collapse sidebar"
-              className="ll-icon-btn"
+              className="fw-icon-btn"
             >
               <ChevronRight className="h-4 w-4" strokeWidth={1.5} />
             </button>
@@ -390,9 +390,9 @@ export function App() {
             <button
               type="button"
               onClick={() => void handleCloseDrawer()}
-              title="Close LayoutLens"
-              aria-label="Close LayoutLens"
-              className="ll-icon-btn"
+              title="Close Framewise"
+              aria-label="Close Framewise"
+              className="fw-icon-btn"
             >
               <X className="h-4 w-4" strokeWidth={1.5} />
             </button>
@@ -400,7 +400,7 @@ export function App() {
         </div>
 
         {/* Clean 3-Mode Switch: Element | Page | Compare */}
-        <nav role="tablist" aria-label="LayoutLens view mode" className="ll-tablist">
+        <nav role="tablist" aria-label="Framewise view mode" className="fw-tablist">
           {MODES.map((item, idx) => {
             const isSelected = mode === item.id;
             return (
@@ -409,20 +409,20 @@ export function App() {
                 ref={(el) => {
                   tabRefs.current[idx] = el;
                 }}
-                id={`ll-tab-${item.id}`}
+                id={`fw-tab-${item.id}`}
                 type="button"
                 role="tab"
                 aria-selected={isSelected}
                 tabIndex={isSelected ? 0 : -1}
                 onClick={() => setMode(item.id)}
                 onKeyDown={(e) => handleTabKeyDown(e, idx)}
-                className="ll-tab"
+                className="fw-tab"
               >
                 {item.label}
                 {item.id === 'compare' && reference.imageDataUrl && reference.visible && (
                   <span
                     className="h-1.5 w-1.5 rounded-full shrink-0"
-                    style={{ backgroundColor: 'var(--ll-accent-fill)' }}
+                    style={{ backgroundColor: 'var(--fw-accent-fill)' }}
                   />
                 )}
               </button>
@@ -433,13 +433,13 @@ export function App() {
 
       {/* Error Notice */}
       {statusError && (
-        <div className="px-5 py-3 border-b border-[var(--ll-hairline)] bg-[var(--ll-warn-soft)] text-[13px] shrink-0">
+        <div className="px-5 py-3 border-b border-[var(--fw-hairline)] bg-[var(--fw-warn-soft)] text-[13px] shrink-0">
           {statusError}
         </div>
       )}
 
       {/* Main Content */}
-      <main role="tabpanel" aria-labelledby={`ll-tab-${mode}`} className="flex-1 overflow-y-auto">
+      <main role="tabpanel" aria-labelledby={`fw-tab-${mode}`} className="flex-1 overflow-y-auto">
         {mode === 'element' && (
           <ElementView
             inspection={activeInspection}
@@ -475,7 +475,7 @@ export function App() {
       </main>
 
       {/* Quiet Contextual Hint Footer */}
-      <footer className="h-11 px-5 bg-[var(--ll-chrome)] border-t border-[var(--ll-hairline)] flex items-center justify-between gap-2 text-[12px] text-[var(--ll-text-muted)] shrink-0">
+      <footer className="h-11 px-5 bg-[var(--fw-chrome)] border-t border-[var(--fw-hairline)] flex items-center justify-between gap-2 text-[12px] text-[var(--fw-text-muted)] shrink-0">
         <span className="truncate">
           {!active
             ? 'Click crosshair to inspect'
@@ -484,7 +484,7 @@ export function App() {
               : 'Click any element to lock & measure'}
         </span>
         <div className="inline-flex items-center gap-1 shrink-0">
-          <kbd className="ll-kbd">Esc</kbd>
+          <kbd className="fw-kbd">Esc</kbd>
           <span>{locked ? 'unlock' : active ? 'pause' : 'close'}</span>
         </div>
       </footer>

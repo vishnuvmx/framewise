@@ -4,7 +4,7 @@ export function exportDesignTokensJson(summary: DesignSystemSummary): string {
   const payload = {
     $schema: 'https://tr.designtokens.org/format/',
     meta: {
-      generator: 'LayoutLens',
+      generator: 'Framewise',
       source: summary.url,
       title: summary.title,
       viewport: `${summary.viewport.width}x${summary.viewport.height}`,

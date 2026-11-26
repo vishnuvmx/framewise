@@ -1,6 +1,6 @@
-# Contributing to LayoutLens
+# Contributing to Framewise
 
-Thanks for considering a contribution to **LayoutLens**! Bug reports, visual QA feedback, and pull requests are always welcome.
+Thanks for considering a contribution to **Framewise**! Bug reports, visual QA feedback, and pull requests are always welcome.
 
 ## Development Setup
 
@@ -11,8 +11,8 @@ Thanks for considering a contribution to **LayoutLens**! Bug reports, visual QA 
 ### Install & Run
 
 ```bash
-git clone https://github.com/<your-username>/layoutlens.git
-cd layoutlens
+git clone https://github.com/<your-username>/framewise.git
+cd framewise
 bun install
 bun run build
 ```
@@ -39,10 +39,10 @@ Please follow these boundaries when adding features or fixing bugs:
 2. **Respect MV3 & Local-First Principles**:
    - Use `async`/`await` (avoid raw `.then()`/`.catch()` chains).
    - Never add inline `<script>` tags in extension HTML files.
-   - Do not introduce network calls, analytics, or external font/CDN dependencies — LayoutLens must remain 100% local-first.
+   - Do not introduce network calls, analytics, or external font/CDN dependencies — Framewise must remain 100% local-first.
    - Keep `src/background/service-worker.ts` stateless across restarts.
 3. **Isolate Page Overlays in Shadow DOM**:
-   - All injected UI (`drawer-host.ts`, `overlay-host.ts`, `reference-overlay.ts`) must live inside isolated Shadow DOM hosts tagged with `data-layoutlens-ui="true"` so the inspector never inspects itself or leaks styles into the host page.
+   - All injected UI (`drawer-host.ts`, `overlay-host.ts`, `reference-overlay.ts`) must live inside isolated Shadow DOM hosts tagged with `data-framewise-ui="true"` so the inspector never inspects itself or leaks styles into the host page.
 4. **Honest Code & Analysis Outputs**:
    - Deterministic heuristics (component discovery, outlier detection, mobile starter snippets) should avoid noisy false positives and communicate approximations clearly.
 

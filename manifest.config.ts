@@ -2,17 +2,17 @@ import { defineManifest } from '@crxjs/vite-plugin';
 
 export default defineManifest({
   manifest_version: 3,
-  name: 'LayoutLens',
+  name: 'Framewise',
   version: '0.4.0',
   description:
-    'Understand. Analyze. Verify. Inspect rendered layouts, discover component patterns and drift, and compare Figma designs locally.',
+    'Understand. Analyze. Verify. Inspect rendered layouts, discover component patterns and drift, and compare design frames locally.',
   icons: {
     '16': 'icons/icon-16.png',
     '48': 'icons/icon-48.png',
     '128': 'icons/icon-128.png',
   },
   action: {
-    default_title: 'Toggle LayoutLens Inspector',
+    default_title: 'Toggle Framewise Inspector',
     default_icon: {
       '16': 'icons/icon-16.png',
       '48': 'icons/icon-48.png',
@@ -44,7 +44,7 @@ export default defineManifest({
         default: 'Alt+Shift+L',
         mac: 'Alt+Shift+L',
       },
-      description: 'Toggle LayoutLens slide-in inspector on the active tab',
+      description: 'Toggle Framewise slide-in inspector on the active tab',
     },
   },
 });
