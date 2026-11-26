@@ -1,0 +1,356 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light dark;
+
+  /* Graphite neutral ramp (adapted from unslop tokens) */
+  --ll-chrome: light-dark(#ffffff, #0f0f10);
+  --ll-bg: light-dark(#fafafa, #141415);
+  --ll-surface: light-dark(#ffffff, #19191b);
+  --ll-raised: light-dark(#f4f4f5, #232325);
+  --ll-hover: light-dark(#ececef, #2a2a2d);
+  --ll-hairline: light-dark(rgba(23, 23, 23, 0.08), rgba(237, 237, 237, 0.08));
+  --ll-hairline-strong: light-dark(rgba(23, 23, 23, 0.15), rgba(237, 237, 237, 0.15));
+
+  /* Three strict text roles */
+  --ll-text: light-dark(#171717, #ededed);
+  --ll-text-secondary: light-dark(#525252, #a1a1a6);
+  --ll-text-muted: light-dark(#737373, #85858b);
+
+  /* Single drafting-blue accent (4.5:1+ contrast on surfaces) */
+  --ll-accent: light-dark(#1d4ed8, #60a5fa);
+  --ll-accent-fill: light-dark(#2563eb, #3b82f6);
+  --ll-accent-soft: light-dark(rgba(37, 99, 235, 0.09), rgba(96, 165, 250, 0.14));
+
+  /* Primary inverted button */
+  --ll-btn-primary-bg: light-dark(#171717, #ededed);
+  --ll-btn-primary-fg: light-dark(#ffffff, #141415);
+  --ll-btn-primary-hover: light-dark(#2e2e2e, #ffffff);
+
+  /* Toned semantic colors */
+  --ll-positive: light-dark(#16a34a, #4cc38a);
+  --ll-positive-soft: light-dark(rgba(22, 163, 74, 0.1), rgba(76, 195, 138, 0.14));
+  --ll-negative: light-dark(#dc2626, #e5484d);
+  --ll-negative-soft: light-dark(rgba(220, 38, 38, 0.1), rgba(229, 72, 77, 0.14));
+  --ll-warn: light-dark(#b45309, #e5a93c);
+  --ll-warn-soft: light-dark(rgba(180, 83, 9, 0.09), rgba(229, 169, 60, 0.14));
+
+  /* Technical drafting tints (used only inside the Box Model moment) */
+  --ll-box-margin-bg: light-dark(rgba(217, 119, 6, 0.08), rgba(245, 158, 11, 0.1));
+  --ll-box-margin-border: light-dark(rgba(180, 83, 9, 0.3), rgba(245, 158, 11, 0.32));
+  --ll-box-padding-bg: light-dark(rgba(22, 163, 74, 0.08), rgba(76, 195, 138, 0.1));
+  --ll-box-padding-border: light-dark(rgba(22, 163, 74, 0.3), rgba(76, 195, 138, 0.32));
+
+  /* Scrollbar tokens (>= 3:1 non-text contrast against surface) */
+  --ll-scrollbar-thumb: light-dark(#8a8a92, #5a5a61);
+  --ll-scrollbar-thumb-hover: light-dark(#525252, #85858b);
+  --ll-scrollbar-track: transparent;
+
+  /* Motion */
+  --ll-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ll-dur-fast: 140ms;
+}
+
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
+  color-scheme: dark;
+}
+
+:root:has(> head > meta[name="color-scheme"][content="light"]) {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--ll-bg);
+  color: var(--ll-text);
+  font-family: "DM Sans Variable", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.02em;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ultra-thin WebKit scrollbar for Chromium side panel & scrollable lists */
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--ll-scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--ll-scrollbar-thumb);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--ll-scrollbar-thumb-hover);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Standard scrollbar fallback for non-WebKit engines without suppressing ::-webkit-scrollbar in Chrome */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ll-scrollbar-thumb) var(--ll-scrollbar-track);
+  }
+}
+
+.ll-mono {
+  font-family: "Geist Mono", "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+.ll-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.ll-section {
+  border-bottom: 1px solid var(--ll-hairline);
+  padding: 20px;
+}
+
+.ll-section:last-child {
+  border-bottom: 0;
+}
+
+.ll-section-title {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  color: var(--ll-text-secondary);
+}
+
+.ll-surface {
+  background-color: var(--ll-surface);
+  border: 1px solid var(--ll-hairline);
+  border-radius: 10px;
+}
+
+.ll-raised {
+  background-color: var(--ll-raised);
+  border: 1px solid var(--ll-hairline);
+  border-radius: 8px;
+}
+
+.ll-row {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background-color var(--ll-dur-fast) var(--ll-ease),
+    border-color var(--ll-dur-fast) var(--ll-ease);
+}
+
+.ll-row:hover {
+  background-color: var(--ll-raised);
+}
+
+.ll-row:focus-visible,
+.ll-btn:focus-visible,
+.ll-icon-btn:focus-visible {
+  outline: 2px solid var(--ll-accent);
+  outline-offset: 1px;
+}
+
+.ll-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color var(--ll-dur-fast) var(--ll-ease),
+    border-color var(--ll-dur-fast) var(--ll-ease),
+    color var(--ll-dur-fast) var(--ll-ease),
+    transform var(--ll-dur-fast) var(--ll-ease);
+}
+
+.ll-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.ll-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ll-btn-primary {
+  background-color: var(--ll-btn-primary-bg);
+  color: var(--ll-btn-primary-fg);
+}
+
+.ll-btn-primary:hover:not(:disabled) {
+  background-color: var(--ll-btn-primary-hover);
+}
+
+.ll-btn-danger {
+  background-color: var(--ll-negative);
+  color: #ffffff;
+}
+
+.ll-btn-danger:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.ll-btn-secondary {
+  background-color: var(--ll-raised);
+  color: var(--ll-text);
+  border-color: var(--ll-hairline);
+}
+
+.ll-btn-secondary:hover:not(:disabled) {
+  background-color: var(--ll-hover);
+  border-color: var(--ll-hairline-strong);
+}
+
+.ll-btn-sm {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.ll-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--ll-hairline);
+  background-color: var(--ll-raised);
+  color: var(--ll-text-secondary);
+  cursor: pointer;
+  transition: background-color var(--ll-dur-fast) var(--ll-ease),
+    color var(--ll-dur-fast) var(--ll-ease),
+    border-color var(--ll-dur-fast) var(--ll-ease),
+    transform var(--ll-dur-fast) var(--ll-ease);
+}
+
+.ll-icon-btn:hover {
+  background-color: var(--ll-hover);
+  color: var(--ll-text);
+  border-color: var(--ll-hairline-strong);
+}
+
+.ll-icon-btn:active {
+  transform: scale(0.97);
+}
+
+/* Signature tactile keycap */
+.ll-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 5px;
+  border: 1px solid var(--ll-hairline-strong);
+  background-color: var(--ll-raised);
+  font-family: "Geist Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--ll-text-secondary);
+}
+
+/* Single-row accessible tablist styled from aria-selected with border underline */
+.ll-tablist {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: inline proximity;
+  border-bottom: 1px solid var(--ll-hairline);
+  background-color: var(--ll-chrome);
+  padding: 0 12px;
+  gap: 4px;
+}
+
+.ll-tablist::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.ll-tab {
+  position: relative;
+  flex: 1 0 auto;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ll-text-muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  scroll-snap-align: start;
+  transition: color var(--ll-dur-fast) var(--ll-ease);
+}
+
+.ll-tab:hover {
+  color: var(--ll-text);
+}
+
+.ll-tab:focus-visible {
+  outline: 2px solid var(--ll-accent);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+.ll-tab[aria-selected="true"] {
+  color: var(--ll-text);
+  font-weight: 500;
+}
+
+.ll-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 4px 0 4px;
+  border-block-end: 2px solid var(--ll-accent);
+}
+
+.ll-code-block {
+  background-color: var(--ll-chrome);
+  border: 1px solid var(--ll-hairline);
+  border-radius: 8px;
+  padding: 14px;
+  font-family: "Geist Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--ll-text);
+  margin: 0;
+}
